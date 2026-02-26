@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 async function create(username, password) {
   const [result] = await connection.promise().query(
-    `SELECT first_name, password
+    `SELECT *
     FROM users
     WHERE LOWER(username) = LOWER(?);`,
     [username]
@@ -28,6 +28,10 @@ async function create(username, password) {
     user: {
       id: user.id,
       first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      streak: user.streak,
+      level: user.level,
     }
   }
 }
