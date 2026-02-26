@@ -11,6 +11,7 @@ require('dotenv').config();
 // import route files
 const quizRoutes = require('./routes/quizRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // create an express application
 const app = express();
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 // register routes ; all quiz-related routes will be prefixed with /api/quiz
 app.use('/api/quiz', quizRoutes);
 app.use('/api/v1/session', sessionRoutes);
+app.use('/api/v1/user', userRoutes);
 
 // start the server ; uses PORT from .env or defaults to 5050
 const PORT = process.env.PORT || 5050;

@@ -6,7 +6,7 @@ async function create(username, password) {
   const [result] = await connection.promise().query(
     `SELECT first_name, password
     FROM users
-    WHERE LOWER(username) = LOWER(?)`,
+    WHERE LOWER(username) = LOWER(?);`,
     [username]
   );
 
