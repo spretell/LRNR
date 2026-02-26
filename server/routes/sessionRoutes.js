@@ -1,5 +1,5 @@
 const express = require('express');
-const createSession = require('../controllers/sessionController.js');
+const { createSession } = require('../controllers/sessionController.js');
 
 const router = express.Router();
 
