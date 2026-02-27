@@ -19,7 +19,7 @@ function Home() {
           </p>
 
           <div className="hero-buttons">
-            <button className="primary-btn" onClick={() => navigate("/quiz")}>
+            <button className="primary-btn" onClick={() => navigate("/auth")}>
               Get Started
             </button>
           </div>

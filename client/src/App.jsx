@@ -4,10 +4,11 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 
 import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 import QuizGeneration from "./pages/QuizGeneration";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
-import Account from "./pages/Account";
 
 function App() {
   const isLoggedIn = false;
@@ -18,10 +19,11 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/quiz-generation" element={<QuizGeneration />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/results" element={<Results />} />
-        <Route path="/account" element={<Account />} />
       </Routes>
 
       <Footer isLoggedIn={isLoggedIn} />
