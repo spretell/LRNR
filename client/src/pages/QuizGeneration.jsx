@@ -1,0 +1,239 @@
+// QuizGeneration.jsx
+
+// collects user preferences (topic, difficulty, # of questions, style) and sends to backend to generate quiz
+
+import { useMemo, useState } from "react";
+import "../styles/QuizGeneration.css";
+
+const TOPIC_SUGGESTIONS = [
+  "javascript",
+  "react",
+  "node",
+  "html",
+  "css",
+  "accessibility",
+  "git",
+  "api design",
+  "sql",
+  "aws",
+];
+
+const DIFFICULTY_OPTIONS = ["novice", "intermediate", "expert"];
+
+const STYLE_OPTIONS = [
+  { value: "normal", label: "normal" },
+  { value: "like-im-8", label: "like I’m 8" },
+  { value: "jedi", label: "jedi" },
+  { value: "ogway", label: "master ogway" },
+  { value: "gangster-40s", label: "1940s gangster" },
+];
+
+export default function QuizGeneration() {
+  const [topic, setTopic] = useState("");
+  const [topicDropdown, setTopicDropdown] = useState("");
+  const [difficulty, setDifficulty] = useState("novice");
+  const [numQuestions, setNumQuestions] = useState(5);
+  const [style, setStyle] = useState("normal");
+
+  const handleTopicDropdownChange = (value) => {
+    setTopicDropdown(value);
+    setTopic(value);
+  };
+
+  const filteredSuggestions = useMemo(() => {
+    if (!topic) return TOPIC_SUGGESTIONS;
+    const t = topic.toLowerCase();
+    return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
+  }, [topic]);
+
+  const handleGenerate = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      topic: topic.trim(),
+      difficulty,
+      numQuestions,
+      style,
+    };
+
+    console.log(payload);
+    alert("will then hook this up to the backend ! :)");
+  };
+
+  return (
+    <main className="qg-page">
+      <section className="qg-card">
+        <div className="qg-grid">
+          <div className="qg-left">
+            <h1 className="qg-title">Build your next quiz in seconds</h1>
+
+            <p className="qg-subtitle">
+              Pick a topic, difficulty, and number of questions. You can choose
+              a suggested topic or type your own. Then generate a quiz powered
+              by AI.
+            </p>
+
+            <ul className="qg-list">
+              <li>Suggested topics + custom topic search</li>
+              <li>Beginner-friendly difficulty levels</li>
+              <li>Style options</li>
+              <li>Designed to match your LRNR style</li>
+            </ul>
+          </div>
+
+          <div className="qg-rightShell">
+            <form className="qg-right" onSubmit={handleGenerate}>
+              <details className="qg-item" open>
+                <summary className="qg-summary">
+                  <div>
+                    <p className="qg-label">Topic</p>
+                    <p className="qg-value">
+                      {topic
+                        ? topic
+                        : "Choose a suggested topic or type your own"}
+                    </p>
+                  </div>
+                  <span className="qg-chevron" aria-hidden="true">
+                    ⌄
+                  </span>
+                </summary>
+
+                <div className="qg-body">
+                  <label className="qg-fieldLabel" htmlFor="topic-select">
+                    Suggested topics
+                  </label>
+                  <select
+                    id="topic-select"
+                    className="qg-select"
+                    value={topicDropdown}
+                    onChange={(e) => handleTopicDropdownChange(e.target.value)}
+                  >
+                    <option value="">Select a topic…</option>
+                    {TOPIC_SUGGESTIONS.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+
+                  <label className="qg-fieldLabel" htmlFor="topic-input">
+                    Or type your own topic
+                  </label>
+                  <input
+                    id="topic-input"
+                    className="qg-input"
+                    value={topic}
+                    onChange={(e) => {
+                      setTopic(e.target.value);
+                      setTopicDropdown("");
+                    }}
+                    placeholder="ex: react hooks, arrays, APIs..."
+                  />
+                </div>
+              </details>
+
+              <details className="qg-item">
+                <summary className="qg-summary">
+                  <div>
+                    <p className="qg-label">Difficulty</p>
+                    <p className="qg-value">{difficulty}</p>
+                  </div>
+                  <span className="qg-chevron" aria-hidden="true">
+                    ⌄
+                  </span>
+                </summary>
+
+                <div className="qg-body">
+                  <label className="qg-fieldLabel" htmlFor="difficulty-select">
+                    Select difficulty
+                  </label>
+
+                  <select
+                    id="difficulty-select"
+                    className="qg-select"
+                    value={difficulty}
+                    onChange={(e) => setDifficulty(e.target.value)}
+                  >
+                    {DIFFICULTY_OPTIONS.map((lvl) => (
+                      <option key={lvl} value={lvl}>
+                        {lvl}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </details>
+
+              <details className="qg-item">
+                <summary className="qg-summary">
+                  <div>
+                    <p className="qg-label">Number of questions</p>
+                    <p className="qg-value">{numQuestions}</p>
+                  </div>
+                  <span className="qg-chevron" aria-hidden="true">
+                    ⌄
+                  </span>
+                </summary>
+
+                <div className="qg-body">
+                  <label className="qg-fieldLabel" htmlFor="num-questions">
+                    Choose how many questions
+                  </label>
+
+                  <select
+                    id="num-questions"
+                    className="qg-select"
+                    value={numQuestions}
+                    onChange={(e) => setNumQuestions(Number(e.target.value))}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                  </select>
+                </div>
+              </details>
+
+              <details className="qg-item">
+                <summary className="qg-summary">
+                  <div>
+                    <p className="qg-label">Style</p>
+                    <p className="qg-value">
+                      {STYLE_OPTIONS.find((s) => s.value === style)?.label}
+                    </p>
+                  </div>
+                  <span className="qg-chevron" aria-hidden="true">
+                    ⌄
+                  </span>
+                </summary>
+
+                <div className="qg-body">
+                  <label className="qg-fieldLabel" htmlFor="style">
+                    Question style
+                  </label>
+
+                  <select
+                    id="style"
+                    className="qg-select"
+                    value={style}
+                    onChange={(e) => setStyle(e.target.value)}
+                  >
+                    {STYLE_OPTIONS.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </details>
+
+              <div className="qg-actions">
+                <button className="qg-btn" type="submit">
+                  Generate Quiz
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

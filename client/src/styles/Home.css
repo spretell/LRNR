@@ -94,8 +94,8 @@
   border: none;
   cursor: pointer;
   overflow: hidden;
-  background-color: #c7c2e3;
-  color: #2b2735;
+  background-color: #2b2735;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.4px;
@@ -109,7 +109,7 @@
 /* lift + text color change */
 .primary-btn:hover {
   transform: translateY(-3px);
-  color: #fff;
+  color: #2b2735;
 }
 
 /* fill layer */
@@ -117,7 +117,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: #2b2735;
+  background-color: #f6f4fa;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
