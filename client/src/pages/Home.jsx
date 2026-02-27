@@ -18,19 +18,16 @@ function Home() {
             smarter and track your progress.
           </p>
 
-          {/* BUTTON only */}
           <div className="hero-buttons">
             <button className="primary-btn" onClick={() => navigate("/quiz")}>
               Get Started
             </button>
           </div>
 
-          {/* SPHERE under button */}
           <div className="sphere-container" aria-hidden="true">
             <ParticleSphere />
           </div>
 
-          {/* TEXT under sphere */}
           <p className="cta-caption">Quizzes powered by AI</p>
         </div>
       </section>
