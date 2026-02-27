@@ -10,7 +10,7 @@ function Home() {
       <section className="hero-card">
         <div className="hero-content">
           <h1 className="hero-title">
-            Your guided path to programming enlightenment
+            Your personalized quiz journey starts here.
           </h1>
 
           <p className="hero-subtitle">
