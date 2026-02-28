@@ -1,12 +1,6 @@
-// XP + level rules
 const connection = require('../db.js');
 
 async function updateXP(amount, userId) {
-  // 1. Get current XP + level
-  // 2. Add XP
-  // 3. Check level-up
-  // 4. Update both XP and level
-  // 5. Return updated user
   const conn = connection.promise();
 
   const [result] = await conn.query(

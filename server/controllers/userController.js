@@ -86,63 +86,8 @@ async function updateUser(req, res) {
   }
 }
 
-// async function updateUserXP(req, res) {
-//   const userId = req.params.id;
-//   const { value } = req.body;
-
-//   try {
-//     const result = await userService.updateXP(value, userId);
-
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({
-//         message: 'User not found or no update performed',
-//       });
-//     }
-
-//     const updatedUser = await userService.show(userId);
-
-//     res.status(200).json({
-//       message: 'Update Successful',
-//       data: updatedUser,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: 'Server error',
-//       error: error.message,
-//     });
-//   }
-// }
-
-// async function updateUserStreak(req, res) {
-//   const userId = req.params.id;
-
-//   try {
-//     const result = await userService.updateStreak(userId);
-
-//     if (result.affectedRows === 0) {
-//       return res.status(404).json({
-//         message: 'User not found or no update performed',
-//       });
-//     }
-
-//     const updatedUser = await userService.show(userId);
-
-//     res.status(200).json({
-//       message: 'Streak Update Successful',
-//       data: updatedUser,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: 'Server error',
-//       error: error.message,
-//     });
-//   }
-// }
-
 module.exports = {
   showUser,
   createUser,
   updateUser,
-  // updateUserXP,
-  // updateUserStreak,
 }
