@@ -1,0 +1,106 @@
+.footer {
+  width: 100%;
+  background: #f6f4fa;
+  border-top: 1px solid #eaeaea;
+}
+
+/* Controls overall layout width + spacing */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 26px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/*LEFT SIDE*/
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Logo sizing */
+.footer-logo {
+  height: 110px;
+  width: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Copyright text */
+.footer-copy {
+  margin: 0;
+  font-size: 14px;
+  color: #2B2735;
+}
+
+/* Tagline (muted tone) */
+.footer-tagline {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(43, 39, 53, 0.7);
+}
+
+/*RIGHT SIDE */
+
+/* Wrapper for title + links */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* pushes everything to the right */
+  text-align: right;
+  gap: 10px;
+}
+
+/* "Links" section title */
+.footer-links-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: rgba(43, 39, 53, 0.7);
+  align-self: flex-end; 
+}
+
+/* Links container */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+/* Individual link styling */
+.footer-link {
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2B2735;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover animation */
+.footer-link:hover {
+  color: #6a64c8;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 800px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .footer-right {
+    width: 100%;
+  }
+
+  .footer-links {
+    width: 100%;
+  }
+}

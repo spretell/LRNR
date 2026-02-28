@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./navbar.css";
+import "../styles/navbar.css";
 
 /* i did ONE component for logged-out vs logged-in view*/
 export default function Navbar({ isLoggedIn }) {
