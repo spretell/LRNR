@@ -35,21 +35,6 @@ async function update(column, value, userId) {
   return result;
 }
 
-// async function updateXP(xpAmount, userId) {
-//   const [result] = await connection.promise().query(
-//     `UPDATE users
-//     SET experience_points = experience_points + (?)
-//     WHERE id = (?);`,
-//     [xpAmount, userId]
-//   );
-
-//   return result;
-// }
-
-// function getXPRequiredForLevel(level) {
-//   return level * 100;
-// }
-
 async function updateStreak(userId) {
   const [result] = await connection.promise().query(
     `UPDATE users
@@ -67,7 +52,4 @@ module.exports = {
   show,
   create,
   update,
-  // updateXP,
-  // getXPRequiredForLevel,
-  // updateStreak,
 };
