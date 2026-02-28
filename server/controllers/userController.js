@@ -1,13 +1,13 @@
 const userService = require('../services/userService.js');
 
 async function showUser(req, res) {
-  const { userId } = req.body;
+  const userId = req.params.id;
 
   try {
     const result = await userService.show(userId);
 
     res.status(200).json({
-      result,
+      data: result,
     });
   } catch (error) {
     res.status(500).json({
@@ -42,5 +42,6 @@ async function createUser(req, res) {
 }
 
 module.exports = {
-  createUser
+  showUser,
+  createUser,
 }
