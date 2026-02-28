@@ -1,5 +1,6 @@
 const connection = require('../db.js');
 const bcrypt = require('bcryptjs');
+const { param } = require('../routes/userRoutes.js');
 
 async function show(userId) {
   const [result] = await connection.promise().query(
@@ -24,7 +25,19 @@ async function create(username, firstName, lastName, password, email) {
   return result;
 }
 
+async function update(column, value, userId) {
+  const [result] = await connection.promise().query(
+    `UPDATE users
+    SET ${column} = (?)
+    WHERE id = (?);`,
+    [value, userId]
+  );
+
+  return result;
+}
+
 module.exports = {
   show,
-  create
+  create,
+  update,
 };

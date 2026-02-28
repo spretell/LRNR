@@ -10,8 +10,8 @@ async function showUser(req, res) {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Error creating user",
+    res.status(404).json({
+      message: 'User not found',
       error: error.message,
     });
   }
@@ -30,12 +30,31 @@ async function createUser(req, res) {
     );
 
     res.status(201).json({
-      message: "User created successfully",
+      message: 'User created successfully',
       userId: result.insertId,
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Error creating user",
+    res.status(422).json({
+      message: 'Error creating user',
+      error: error.message,
+    });
+  }
+}
+
+async function updateUser(req, res) {
+  const userId = req.params.id;
+  const { column, value } = req.body;
+
+  try {
+    const result = await userService.update(column, value, userId);
+
+    res.status(200).json({
+      message: 'Update Successful',
+      data: result,
+    });
+  } catch (error) {
+    res.status(404).json({
+      message: 'User not found',
       error: error.message,
     });
   }
@@ -44,4 +63,5 @@ async function createUser(req, res) {
 module.exports = {
   showUser,
   createUser,
+  updateUser,
 }
