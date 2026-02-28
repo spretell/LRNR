@@ -36,8 +36,22 @@ async function update(column, value, userId) {
   return result;
 }
 
+async function updateStreak(userId) {
+  const [result] = await connection.promise().query(
+    `UPDATE users
+    SET streak = streak + 1,
+      last_streak_update = CURDATE()
+    WHERE id = (?)
+      AND (last_streak_update IS NULL OR last_streak_update < CURDATE());`,
+    [userId]
+  );
+
+  return result;
+}
+
 module.exports = {
   show,
   create,
   update,
+  updateStreak,
 };
