@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../styles/navbar.css";
 
 /* i did ONE component for logged-out vs logged-in view*/
 export default function Navbar({ isLoggedIn }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   // Close the drawer
   const closeMenu = () => setMenuOpen(false);
@@ -34,10 +37,25 @@ export default function Navbar({ isLoggedIn }) {
   const navLinkClass = ({ isActive }) =>
     isActive ? "nav-link active" : "nav-link";
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      closeMenu();
+      navigate("/auth");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const handleLogin = () => {
+    closeMenu();
+    navigate("/auth");
+  };
+
   return (
     <nav className="navbar">
       <div className="nav-container">
-        {/* LOGO*/}
+        {/* LOGO */}
         <NavLink to="/" className="logo-link" onClick={closeMenu}>
           <img
             className="logo-img"
@@ -46,7 +64,7 @@ export default function Navbar({ isLoggedIn }) {
           />
         </NavLink>
 
-        {/* DESKTOP NAV*/}
+        {/* DESKTOP NAV */}
         <div className="nav-links nav-links--desktop">
           {isLoggedIn ? (
             <>
@@ -58,12 +76,16 @@ export default function Navbar({ isLoggedIn }) {
                 Account
               </NavLink>
 
-              <button className="primary-btn" type="button">
+              <button
+                className="primary-btn"
+                type="button"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </>
           ) : (
-            <button className="primary-btn" type="button">
+            <button className="primary-btn" type="button" onClick={handleLogin}>
               Login
             </button>
           )}
@@ -124,7 +146,11 @@ export default function Navbar({ isLoggedIn }) {
           <div className="drawer-links">
             {isLoggedIn ? (
               <>
-                <NavLink to="/quiz" className={navLinkClass} onClick={closeMenu}>
+                <NavLink
+                  to="/quiz"
+                  className={navLinkClass}
+                  onClick={closeMenu}
+                >
                   Quiz
                 </NavLink>
 
@@ -136,12 +162,20 @@ export default function Navbar({ isLoggedIn }) {
                   Account
                 </NavLink>
 
-                <button className="primary-btn drawer-btn" type="button">
+                <button
+                  className="primary-btn drawer-btn"
+                  type="button"
+                  onClick={handleLogout}
+                >
                   Logout
                 </button>
               </>
             ) : (
-              <button className="primary-btn drawer-btn" type="button">
+              <button
+                className="primary-btn drawer-btn"
+                type="button"
+                onClick={handleLogin}
+              >
                 Login
               </button>
             )}

@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
-import "../styles/footer.css"; // use "./footer.css" if your file lives in components
+import { useAuth } from "../context/AuthContext";
+import "../styles/footer.css";
 
-export default function Footer({ isLoggedIn = false }) {
+export default function Footer() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -24,7 +27,6 @@ export default function Footer({ isLoggedIn = false }) {
 
         {/* RIGHT SECTION */}
         <div className="footer-right">
-          
           <p className="footer-links-title">Links</p>
 
           <nav className="footer-links" aria-label="Footer navigation">
@@ -32,7 +34,7 @@ export default function Footer({ isLoggedIn = false }) {
               Home
             </NavLink>
 
-            {isLoggedIn && (
+            {isAuthenticated && (
               <>
                 <NavLink to="/account" className="footer-link">
                   Account

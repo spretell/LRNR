@@ -400,7 +400,7 @@
 }
 
 .auth-right.is-signup .auth-signupFields {
-  max-height: 220px;
+  max-height: 420px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -421,7 +421,7 @@
 }
 
 .auth-right.is-signup .auth-signupFields {
-  max-height: 260px;
+  max-height: 420px;
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
