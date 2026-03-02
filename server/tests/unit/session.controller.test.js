@@ -9,11 +9,10 @@ let req, res;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-})
+});
 
-describe('Session Controller', () => {
-
-  describe('Create Session - Happy Path', () => {
+describe('Session Controller - Create Session', () => {
+  describe('Happy Path', () => {
     beforeEach(() => {
       req.body = userLogin;
 
@@ -45,7 +44,7 @@ describe('Session Controller', () => {
     });
   });
 
-  describe('Create Session - Sad Path', () => {
+  describe('Sad Path', () => {
     it('should return 401 when SessionService.create throws', async () => {
       SessionService.create.mockRejectedValue(new Error('Invalid credentials'));
       await SessionController.createSession(req, res);
