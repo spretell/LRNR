@@ -3,7 +3,6 @@ const UserService = require('../../services/userService');
 const httpMocks = require('node-mocks-http');
 const userInfo = require('../mock-data/user-info.json');
 
-// UserService.show = jest.fn();
 jest.mock('../../services/userService');
 
 let req, res;
@@ -87,7 +86,6 @@ describe('User Controller - Show Action', () => {
 
 describe('User Controller - Create Action', () => {
   describe('Happy Path', () => {
-
     const newUser = {
       "username": "newuser",
       "first_name": "Jane",
