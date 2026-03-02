@@ -1,6 +1,6 @@
 // Auth.jsx
 
-// login + create account page ; collects user credentials and sends to backend for authentication
+// login + create account page
 
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,111 +9,105 @@ import "../styles/Auth.css";
 export default function Auth() {
   const navigate = useNavigate();
 
-  // toggle between login and signup
-  const [mode, setMode] = useState("login"); // "login" | "signup"
+  const [mode, setMode] = useState("login");
 
-  // shared fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // signup-only fields
   const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // simple UI-only validation (no backend yet)
-  const validationMessage = useMemo(() => {
-    if (!email || !password) return "";
+  const uiError = useMemo(() => {
+    if (!email && !password) return "";
+    if (password && password.length < 6)
+      return "Password must be at least 6 characters.";
     if (mode === "signup" && password !== confirmPassword)
       return "Passwords do not match.";
-    if (password.length > 0 && password.length < 6)
-      return "Password should be at least 6 characters.";
     return "";
   }, [email, password, confirmPassword, mode]);
 
   const canSubmit = useMemo(() => {
     if (!email || !password) return false;
+    if (password.length < 6) return false;
     if (mode === "signup") {
       if (!name) return false;
       if (!confirmPassword) return false;
       if (password !== confirmPassword) return false;
     }
-    if (password.length < 6) return false;
     return true;
   }, [email, password, confirmPassword, name, mode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Later:
-    // - login: POST /api/auth/login
-    // - signup: POST /api/auth/signup
-    // For now, just demo navigation.
     console.log({ mode, name, email, password });
 
-    // pretend auth success → go to dashboard/home
-    navigate("/dashboard");
+    navigate("/account");
   };
 
   return (
     <main className="auth-page">
-      <section className="auth-card" aria-label="Authentication">
+      <section
+        className={`auth-card ${mode === "signup" ? "card-signup" : "card-login"}`}
+        aria-label="Login or create account"
+      >
         <div className="auth-grid">
-          {/* LEFT: Branding + explanation */}
           <div className="auth-left">
-            <p className="auth-kicker">Welcome to LRNR</p>
-
             <h1 className="auth-title">
               {mode === "login"
-                ? "Log in to keep your streak going"
-                : "Create an account to start leveling up"}
+                ? "Welcome back. Keep your streak alive."
+                : "Create your account and start leveling up."}
             </h1>
 
             <p className="auth-subtitle">
               {mode === "login"
-                ? "Pick up right where you left off. Your quizzes, XP, and progress are waiting."
-                : "Track streaks, collect XP, and save your best quizzes — all powered by AI."}
+                ? "Log in to access your progress, XP, and saved quiz history."
+                : "Track your streak, collect XP, and save your best quiz scores."}
             </p>
 
-            <ul className="auth-bullets">
+            <ul className="auth-bullets" aria-label="Benefits">
               <li>Streak tracking + XP leveling</li>
-              <li>Platinum quiz list (100% scores)</li>
+              <li>Platinum quizzes (100% scores)</li>
               <li>Personalized quizzes by topic + difficulty</li>
             </ul>
 
-            <div className="auth-switchRow">
+            <div className="auth-toggle" role="tablist" aria-label="Auth mode">
               <button
                 type="button"
-                className={`auth-modeBtn ${mode === "login" ? "is-active" : ""}`}
+                className={`auth-toggleBtn ${mode === "login" ? "is-active" : ""}`}
                 onClick={() => setMode("login")}
+                aria-selected={mode === "login"}
               >
                 Log in
               </button>
+
               <button
                 type="button"
-                className={`auth-modeBtn ${mode === "signup" ? "is-active" : ""}`}
+                className={`auth-toggleBtn ${mode === "signup" ? "is-active" : ""}`}
                 onClick={() => setMode("signup")}
+                aria-selected={mode === "signup"}
               >
                 Create account
               </button>
             </div>
-
-            <p className="auth-footnote">Quizzes powered by AI</p>
           </div>
 
-          {/* RIGHT: Form */}
-          <form className="auth-right" onSubmit={handleSubmit}>
+          <form
+            className={`auth-right ${mode === "signup" ? "is-signup" : "is-login"}`}
+            onSubmit={handleSubmit}
+          >
             <div className="auth-formHeader">
               <h2 className="auth-formTitle">
                 {mode === "login" ? "Log in" : "Create account"}
               </h2>
               <p className="auth-formHint">
                 {mode === "login"
-                  ? "Use your email and password."
-                  : "Use a real email — you’ll need it later."}
+                  ? "Enter your email and password to continue."
+                  : "Enter your info to create an account."}
               </p>
             </div>
 
-            {mode === "signup" && (
+            <div className="auth-signupFields" aria-hidden={mode !== "signup"}>
               <div className="auth-field">
                 <label className="auth-label" htmlFor="name">
                   Name
@@ -123,11 +117,28 @@ export default function Auth() {
                   className="auth-input"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="ex: Stephanie"
+                  placeholder="ex: John Doe"
                   autoComplete="name"
+                  disabled={mode !== "signup"}
                 />
               </div>
-            )}
+
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="confirmPassword">
+                  Confirm password
+                </label>
+                <input
+                  id="confirmPassword"
+                  className="auth-input"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  disabled={mode !== "signup"}
+                />
+              </div>
+            </div>
 
             <div className="auth-field">
               <label className="auth-label" htmlFor="email">
@@ -160,26 +171,9 @@ export default function Auth() {
               />
             </div>
 
-            {mode === "signup" && (
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="confirm">
-                  Confirm password
-                </label>
-                <input
-                  id="confirm"
-                  className="auth-input"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                />
-              </div>
-            )}
-
-            {validationMessage && (
+            {uiError && (
               <p className="auth-error" role="alert">
-                {validationMessage}
+                {uiError}
               </p>
             )}
 
@@ -187,7 +181,7 @@ export default function Auth() {
               {mode === "login" ? "Log in" : "Create account"}
             </button>
 
-            <div className="auth-helperRow">
+            <div className="auth-links">
               <button
                 type="button"
                 className="auth-linkBtn"

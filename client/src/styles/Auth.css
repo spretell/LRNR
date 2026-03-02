@@ -1,4 +1,4 @@
-/* Auth.css - LRNR Login/Create Account Page */
+/* - - - login / create account styles - - - */
 
 .auth-page {
   min-height: 100vh;
@@ -9,34 +9,76 @@
 }
 
 .auth-card {
+  position: relative;
   width: min(1100px, 92vw);
   border-radius: 28px;
   border: 1px solid #e5e1ef;
   overflow: hidden;
 
-  /* slightly different gradient than quiz page (adds more blue) */
-  background: linear-gradient(
-    135deg,
-    #e3f0ff 0%,
-    #ede7ff 35%,
-    #f8dff1 70%,
-    #f3eff8 100%
-  );
+  transition:
+    background 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 800ms cubic-bezier(0.22, 1, 0.36, 1);
 
   box-shadow:
     0 20px 60px rgba(30, 27, 42, 0.1),
     0 2px 10px rgba(30, 27, 42, 0.06);
 }
 
+.auth-card.card-login {
+  background: linear-gradient(
+    135deg,
+    #e3f0ff 0%,
+    #cfe7ff 25%,
+    #ede7ff 60%,
+    #f6f4fa 100%
+  );
+}
+
+.auth-card.card-signup {
+  background: linear-gradient(
+    135deg,
+    #ede7ff 0%,
+    #dcd2f9 30%,
+    #f8dff1 65%,
+    #f6f4fa 100%
+  );
+}
+
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  filter: blur(40px);
+  pointer-events: none;
+  transition: background 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.auth-card.card-login::before {
+  background: radial-gradient(
+    circle at 70% 20%,
+    rgba(200, 217, 255, 0.55) 0%,
+    rgba(207, 231, 255, 0.25) 35%,
+    rgba(246, 244, 250, 0) 70%
+  );
+}
+
+.auth-card.card-signup::before {
+  background: radial-gradient(
+    circle at 30% 70%,
+    rgba(189, 167, 235, 0.55) 0%,
+    rgba(199, 194, 227, 0.25) 35%,
+    rgba(246, 244, 250, 0) 70%
+  );
+}
+
 .auth-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1.05fr;
   gap: 36px;
   padding: 56px 48px;
   align-items: start;
 }
-
-/* LEFT PANEL */
 
 .auth-left {
   padding-right: 10px;
@@ -50,7 +92,7 @@
   background: rgba(255, 255, 255, 0.55);
   color: #2b2735;
   font-size: 13px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.35px;
   margin: 0;
 }
 
@@ -79,14 +121,14 @@
   font-size: 14px;
 }
 
-.auth-switchRow {
+.auth-toggle {
   margin-top: 18px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.auth-modeBtn {
+.auth-toggleBtn {
   border: 1px solid rgba(30, 27, 42, 0.12);
   background: rgba(255, 255, 255, 0.55);
   color: #2b2735;
@@ -96,28 +138,26 @@
   font-weight: 700;
   letter-spacing: 0.3px;
   transition:
-    transform 300ms ease,
-    box-shadow 300ms ease,
-    background 300ms ease;
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    background 250ms ease;
 }
 
-.auth-modeBtn:hover {
+.auth-toggleBtn:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 18px rgba(30, 27, 42, 0.08);
 }
 
-.auth-modeBtn.is-active {
+.auth-toggleBtn.is-active {
   background: rgba(199, 194, 227, 0.65);
 }
 
-.auth-footnote {
+.auth-note {
   margin-top: 14px;
   color: #7c768f;
   font-size: 12px;
   letter-spacing: 0.35px;
 }
-
-/* RIGHT PANEL (FORM) */
 
 .auth-right {
   display: grid;
@@ -175,7 +215,6 @@
   box-shadow: 0 0 0 4px rgba(205, 186, 244, 0.35);
 }
 
-/* Error message */
 .auth-error {
   margin: 2px 0 0;
   color: #2b2735;
@@ -186,7 +225,6 @@
   font-size: 13px;
 }
 
-/* BUTTON - matches your Home button style/shape */
 .auth-btn {
   position: relative;
   padding: 16px 36px;
@@ -200,12 +238,11 @@
   font-weight: 700;
   letter-spacing: 0.4px;
   z-index: 0;
-
   transition:
     transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 900ms cubic-bezier(0.22, 1, 0.36, 1),
     color 500ms ease,
-    opacity 300ms ease;
+    opacity 250ms ease;
 }
 
 .auth-btn::before {
@@ -223,7 +260,7 @@
   content: "";
   position: absolute;
   inset: -10px;
-  border-radius: 24px;
+  border-radius: 40px;
   background: radial-gradient(
     circle,
     rgba(207, 231, 255, 0.6) 0%,
@@ -254,7 +291,7 @@
   cursor: not-allowed;
 }
 
-.auth-helperRow {
+.auth-links {
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -271,15 +308,15 @@
   font-size: 13px;
   letter-spacing: 0.2px;
   opacity: 0.75;
-  transition: opacity 200ms ease, transform 200ms ease;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
 }
 
 .auth-linkBtn:hover {
   opacity: 1;
   transform: translateY(-1px);
 }
-
-/* BREAKPOINTS */
 
 @media (max-width: 900px) {
   .auth-grid {
@@ -291,6 +328,7 @@
 @media (max-width: 520px) {
   .auth-grid {
     padding: 34px 18px;
+    gap: 18px;
   }
 
   .auth-right {
@@ -302,7 +340,98 @@
     text-align: center;
   }
 
-  .auth-helperRow {
+  .auth-links {
     justify-content: flex-start;
   }
+}
+
+@media (min-width: 901px) {
+  .auth-card {
+    transition:
+      background 1600ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 1600ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .auth-card.card-signup {
+    transform: translateY(-6px);
+    transition-delay: 280ms;
+  }
+
+  .auth-card.card-login {
+    transform: translateY(0);
+    transition-delay: 0ms;
+  }
+
+  .auth-right {
+    transition:
+      min-height 1600ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 350ms ease,
+      transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+  }
+
+  .auth-card.card-login .auth-right {
+    min-height: 360px;
+  }
+
+  .auth-card.card-signup .auth-right {
+    min-height: 460px;
+  }
+}
+
+@media (min-width: 901px) {
+  .auth-card {
+    will-change: transform;
+  }
+}
+
+.auth-signupFields {
+  display: grid;
+  gap: 12px;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-6px);
+  overflow: hidden;
+  transition:
+    max-height 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 700ms ease,
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.auth-right.is-signup .auth-signupFields {
+  max-height: 220px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.auth-signupFields {
+  display: grid;
+  gap: 12px;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(2px);
+  overflow: hidden;
+  transition:
+    max-height 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-right.is-signup .auth-signupFields {
+  max-height: 260px;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.auth-right.is-login .auth-signupFields {
+  margin-bottom: 0;
+}
+
+.auth-right,
+.auth-signupFields {
+  will-change: max-height, opacity, transform, filter;
 }
