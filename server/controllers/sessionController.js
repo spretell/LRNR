@@ -30,6 +30,17 @@ async function createSession(req, res) {
   }
 };
 
+async function logout(req, res) {
+  res.clearCookies('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+  res.status(200).json({ message: 'Signed out' });
+};
+
 module.exports = {
-  createSession
+  createSession,
+  logout,
 };
