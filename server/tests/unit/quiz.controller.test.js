@@ -51,4 +51,41 @@ describe('Quiz Controller - Show Action', () => {
     });
 
   });
+
+  describe('Sab Path', () => {
+    it('should return 404 response code and an error message', async () => {
+      QuizService.show.mockResolvedValue(null);
+
+      await QuizController.showQuizzes(req, res);
+      expect(res.statusCode).toBe(404);
+      expect(res._isEndCalled()).toBeTruthy();
+      expect(res._getJSONData()).toStrictEqual({
+        message: 'User not found'
+      });
+    });
+
+    it('should return 500 response code and an error message', async () => {
+      QuizService.show.mockRejectedValue(new Error('Database error'));
+
+      await QuizController.showQuizzes(req, res);
+      expect(res.statusCode).toBe(500);
+      expect(res._isEndCalled()).toBeTruthy();
+      expect(res._getJSONData()).toStrictEqual({
+        "error": "Database error",
+        "message": "Server error",
+      })
+    });
+
+  });
+});
+
+describe('Quiz Controller - Create Action', () => {
+  describe('Happy Path', () => {
+    const newQuiz = {
+      "title": "Quiz Name",
+      "difficulty": "Beginner"
+    }
+
+    beforeEach
+  });
 });
