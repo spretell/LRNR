@@ -70,3 +70,11 @@ describe('Session Controller - Create Session', () => {
     });
   });
 });
+
+describe('Session Controller - Logout', () => {
+  describe('Happy Path', () => {
+    it('should have a logout function', () => {
+      expect(typeof SessionController.logout).toBe('function');
+    });
+  });
+});
