@@ -31,13 +31,13 @@ async function createSession(req, res) {
 };
 
 async function logout(req, res) {
-  res.clearCookies('token', {
+  res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
   });
-  res.status(200).json({ message: 'Signed out' });
+  res.status(200).json({ message: 'Sign out successful' });
 };
 
 module.exports = {
