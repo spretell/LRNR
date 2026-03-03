@@ -1,27 +1,65 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import Navbar from "./components/navbar"; 
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 
 import Home from "./pages/Home";
+import Auth from "./pages/Auth";
+import Account from "./pages/Account";
 import QuizGeneration from "./pages/QuizGeneration";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
-import Account from "./pages/Account";
 
 function App() {
-  const isLoggedIn = true; 
-
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} /> 
+      <Navbar />
 
       <Routes>
+        {/* public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/quiz-generation" element={<QuizGeneration />} />
-        <Route path="/quiz" element={<Quiz />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/auth" element={<Auth />} />
+
+        {/* protected routes */}
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/quiz-generation"
+          element={
+            <ProtectedRoute>
+              <QuizGeneration />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/quiz"
+          element={
+            <ProtectedRoute>
+              <Quiz />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/results"
+          element={
+            <ProtectedRoute>
+              <Results />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
+      <Footer />
     </Router>
   );
 }

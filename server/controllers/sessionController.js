@@ -17,7 +17,7 @@ async function createSession(req, res) {
         path: '/',
         maxAge: 3600000,
       })
-      .status(200)
+      .status(201)
       .json({
         message: 'Sign in successful',
         token,

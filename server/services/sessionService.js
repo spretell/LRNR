@@ -26,12 +26,12 @@ async function create(username, password) {
   return {
     token,
     user: {
-      id,
-      first_name,
-      last_name,
-      email,
-      streak,
-      level,
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      streak: user.streak,
+      level: user.level,
     }
   }
 }
