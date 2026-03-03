@@ -9,7 +9,7 @@ import Results from "./pages/Results";
 import Account from "./pages/Account";
 
 function App() {
-  const isLoggedIn = false; 
+  const isLoggedIn = true; 
 
   return (
     <Router>
