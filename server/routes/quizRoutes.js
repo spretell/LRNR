@@ -7,10 +7,10 @@ const express = require('express');
 const router = express.Router();
 
 // import controller functions
-const { createQuiz, saveQuiz, showQuizzes } = require('../controllers/quizController');
+const { saveQuiz, showQuizzes } = require('../controllers/quizController');
 
 // POST /api/quiz → create a new quiz
-router.post('/', createQuiz);
+// router.post('/', createQuiz);
 router.get('/:id', showQuizzes);
 router.post('/:id', saveQuiz);
 

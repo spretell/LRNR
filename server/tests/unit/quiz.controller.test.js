@@ -80,12 +80,105 @@ describe('Quiz Controller - Show Action', () => {
 });
 
 describe('Quiz Controller - Create Action', () => {
-  describe('Happy Path', () => {
-    const newQuiz = {
-      "title": "Quiz Name",
-      "difficulty": "Beginner"
-    }
+  const userId = 101
+  const newQuiz = {
+    "title": "Quiz Name",
+    "difficulty": "Beginner"
+  }
+  beforeEach(() => {
+    req.params.id = userId;
+    req.body = newQuiz;
 
-    beforeEach
+    jest.clearAllMocks();
+  });
+  describe('Happy Path', () => {
+
+    beforeEach(() => {      
+      QuizService.create.mockResolvedValue({
+        affectedRows: 1
+      });
+
+      QuizService.show.mockResolvedValue([
+        {
+          id: 99,
+          title: 'Quiz Name',
+          difficulty: 'Beginner',
+        },
+      ]);
+    });
+
+    it('should have a saveQuiz function', () => {
+      expect(typeof QuizController.saveQuiz).toBe('function');
+    });
+
+    it('should call QuizService.create', async () => {
+      await QuizController.saveQuiz(req, res);
+      
+      expect(QuizService.create).toHaveBeenCalledWith(
+        newQuiz.title,
+        newQuiz.difficulty,
+        userId
+      );
+    });
+
+    it('should call QuizService.show after successful create', async () => {
+      await QuizController.saveQuiz(req, res);
+
+      expect(QuizService.show).toHaveBeenCalledWith(userId);
+    });
+
+    it('should return 201 and quiz data', async () => {
+      await QuizController.saveQuiz(req, res);
+
+      expect(res.statusCode).toBe(201);
+      expect(res._getJSONData()).toStrictEqual({
+        data: [
+          {
+            id: 99,
+            title: 'Quiz Name',
+            difficulty: 'Beginner',
+          },
+        ],
+      });
+    });
+  });
+
+  describe('Sad Path', () => {
+    it('should return a 422 when required fields are missing', async () => {
+      req.body = {};
+
+      await QuizController.saveQuiz(req, res);
+
+      expect(res.statusCode).toBe(422);
+      expect(res._isEndCalled()).toBeTruthy();
+      expect(res._getJSONData()).toStrictEqual({
+        message: 'All fields are required'
+      });
+    });
+
+    it('should return 404 when affectedRows is 0', async () => {
+      QuizService.create.mockResolvedValue({
+        affectedRows: 0,
+      });
+
+      await QuizController.saveQuiz(req, res);
+
+      expect(res.statusCode).toBe(404);
+      expect(res._getJSONData()).toStrictEqual({
+        message: 'Unable to save to the database',
+      });
+    });
+
+    it('should return 500 if service throws error', async () => {
+      QuizService.create.mockRejectedValue(new Error('DB crashed'));
+
+      await QuizController.saveQuiz(req, res);
+
+      expect(res.statusCode).toBe(500);
+      expect(res._getJSONData()).toStrictEqual({
+        message: 'Server error',
+        error: 'DB crashed',
+      });
+    });
   });
 });
