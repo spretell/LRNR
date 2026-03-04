@@ -1,31 +1,63 @@
-// starter code for quizController.js
+// const { generateOpenAIQuiz } = require("../services/openaiService");
+const quizService = require('../services/quizService');
 
-// this file contains the logic for handling quiz-related requests
-
-// import the OpenAI service function to generate quizzes
-const { generateOpenAIQuiz } = require("../services/openaiService");
-
-// controller function for creating a quiz
-async function createQuiz(req, res) {
-  // extract data sent from the frontend
-  const { topic, difficulty, numQuestions, style } = req.body;
+async function showQuizzes(req, res) {
+  const userId = req.params.id;
 
   try {
-    // call the OpenAI service function to generate a quiz based on the provided parameters (mock for now)
-    const quiz = await generateOpenAIQuiz(
-      topic,
-      difficulty,
-      numQuestions,
-      style,
-    );
+    const result = await quizService.show(userId);
 
-    // send quiz back to frontend
-    res.json(quiz);
+    if (!result || result.length === 0) {
+      return res.status(404).json({
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      data: result,
+    })
   } catch (error) {
-    console.error("Error generating quiz:", error);
-    res.status(500).json({ error: "Failed to generate quiz." });
+    return res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+}
+
+async function saveQuiz(req, res) {
+  const userId = req.params.id;
+  const { title, difficulty } = req.body;
+
+  if (!title || !difficulty) {
+    return res.status(422).json({
+      message: 'All fields are required',
+    });
+  }
+
+  try {
+    const result = await quizService.create(title, difficulty, userId);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: 'Unable to save to the database',
+      });
+    }
+
+    const userQuizzes = await quizService.show(userId);
+
+    res.status(201).json({
+      data: userQuizzes,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
   }
 }
 
 // export the controller functions so they can be used in the routes
-module.exports = { createQuiz };
+module.exports = {
+  showQuizzes,
+  saveQuiz,
+};

@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // register routes ; all quiz-related routes will be prefixed with /api/quiz
-app.use('/api/quiz', quizRoutes);
+app.use('/api/v1/quiz', quizRoutes);
 app.use('/api/v1/session', sessionRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/progress', progressRoutes);
