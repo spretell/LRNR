@@ -5,8 +5,10 @@
 }
 
 .account-shell {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
 }
 
 /* MAIN HERO CONTAINER */
@@ -133,6 +135,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 18px;
+  /*pushes CTA section slightly down */
+  margin-top: 200px;
 }
 
 .account-cta-text {
@@ -140,6 +144,45 @@
   font-size: 16px;
   font-weight: 600;
   color: rgba(43, 39, 53, 0.85);
+}
+
+/*Subsection inside each stat card (how it works) */
+.stat-subsection {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(43, 39, 53, 0.15);
+}
+
+.stat-subtitle {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: rgba(43, 39, 53, 0.7);
+}
+
+.stat-detail {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(43, 39, 53, 0.75);
+}
+
+/* XP progress bar */
+.xp-bar {
+  margin-top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(43, 39, 53, 0.12);
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(106, 100, 200, 0.9);
+  transition: width 0.3s ease;
 }
 
 @media (max-width: 800px) {
@@ -158,5 +201,6 @@
   .account-cta {
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 40px; /* this makes its so the cta btn isnt pushed so down like when viewing on larger screenss*/
   }
 }

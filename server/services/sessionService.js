@@ -32,6 +32,7 @@ async function create(username, password) {
       email: user.email,
       streak: user.streak,
       level: user.level,
+      experience_points:user.experience_points
     }
   }
 }
