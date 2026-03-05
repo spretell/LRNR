@@ -70,3 +70,20 @@ describe('Session Controller - Create Session', () => {
     });
   });
 });
+
+describe('Session Controller - Logout', () => {
+  it('should have a logout function', () => {
+    expect(typeof SessionController.logout).toBe('function');
+  });
+
+  it('should return a 200 response code', async () => {
+    await SessionController.logout(req, res);
+    expect(res.statusCode).toBe(200);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it('should return a JSON body in response', async () => {
+    await SessionController.logout(req, res);
+    expect(res._getJSONData()).toStrictEqual({"message": "Sign out successful"});
+  });
+});
