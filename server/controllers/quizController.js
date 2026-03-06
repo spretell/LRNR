@@ -3,7 +3,7 @@
 // this file contains the logic for handling quiz-related requests
 
 // import the OpenAI service function to generate quizzes
-const { generateOpenAIQuiz } = require("../services/openaiService");
+const { generateOpenAIQuiz } = require("../services/geminiService");
 
 // controller function for creating a quiz
 async function createQuiz(req, res) {
