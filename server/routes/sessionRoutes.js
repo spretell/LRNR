@@ -1,8 +1,10 @@
 const express = require('express');
-const { createSession, logout } = require('../controllers/sessionController.js');
+const auth = require("../middleware/auth.js");
+const { checkSession, createSession, logout } = require('../controllers/sessionController.js');
 
 const router = express.Router();
 
+router.get('/', auth, checkSession);
 router.post('/', createSession);
 router.post('/logout', logout);
 
