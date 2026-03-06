@@ -1,5 +1,15 @@
 const sessionService = require('../services/sessionService.js');
 
+async function checkSession(req, res) {
+  try {
+    const user = await sessionService.show(req.user.userId);
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+}
+
 async function createSession(req, res) {
   const { username, password } = req.body;
 
@@ -41,6 +51,7 @@ async function logout(req, res) {
 };
 
 module.exports = {
+  checkSession,
   createSession,
   logout,
 };
