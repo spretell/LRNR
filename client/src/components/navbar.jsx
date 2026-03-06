@@ -4,10 +4,15 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/navbar.css";
 
 /* i did ONE component for logged-out vs logged-in view*/
-export default function Navbar({ isLoggedIn }) {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+
+  // pull auth state from context (no more prop drilling)
+  const { logout, isAuthenticated, loading } = useAuth();
+
+  //  don't show the "logged out" navbar while auth is still loading
+  const showLoggedInNav = !loading && isAuthenticated;
 
   // Close the drawer
   const closeMenu = () => setMenuOpen(false);
@@ -57,16 +62,15 @@ export default function Navbar({ isLoggedIn }) {
       <div className="nav-container">
         {/* LOGO */}
         <NavLink to="/" className="logo-link" onClick={closeMenu}>
-          <img
-            className="logo-img"
-            src="/images/LRNR-logo.png"
-            alt="LRNR logo"
-          />
+          <img className="logo-img" src="/images/LRNR-logo.png" alt="LRNR logo" />
         </NavLink>
 
         {/* DESKTOP NAV */}
         <div className="nav-links nav-links--desktop">
-          {isLoggedIn ? (
+          {/*show a small placeholder while auth is still loading*/}
+          {loading ? (
+            <span className="nav-loading">Loading...</span>
+          ) : showLoggedInNav ? (
             <>
               <NavLink to="/quiz" className={navLinkClass}>
                 Quiz
@@ -76,11 +80,7 @@ export default function Navbar({ isLoggedIn }) {
                 Account
               </NavLink>
 
-              <button
-                className="primary-btn"
-                type="button"
-                onClick={handleLogout}
-              >
+              <button className="primary-btn" type="button" onClick={handleLogout}>
                 Logout
               </button>
             </>
@@ -144,21 +144,16 @@ export default function Navbar({ isLoggedIn }) {
           </div>
 
           <div className="drawer-links">
-            {isLoggedIn ? (
+            {/* prevent showing logged-out drawer while auth is loading */}
+            {loading ? (
+              <span className="nav-loading">Loading...</span>
+            ) : showLoggedInNav ? (
               <>
-                <NavLink
-                  to="/quiz"
-                  className={navLinkClass}
-                  onClick={closeMenu}
-                >
+                <NavLink to="/quiz" className={navLinkClass} onClick={closeMenu}>
                   Quiz
                 </NavLink>
 
-                <NavLink
-                  to="/account"
-                  className={navLinkClass}
-                  onClick={closeMenu}
-                >
+                <NavLink to="/account" className={navLinkClass} onClick={closeMenu}>
                   Account
                 </NavLink>
 
@@ -171,11 +166,7 @@ export default function Navbar({ isLoggedIn }) {
                 </button>
               </>
             ) : (
-              <button
-                className="primary-btn drawer-btn"
-                type="button"
-                onClick={handleLogin}
-              >
+              <button className="primary-btn drawer-btn" type="button" onClick={handleLogin}>
                 Login
               </button>
             )}
