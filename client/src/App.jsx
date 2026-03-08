@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import QuizGeneration from "./pages/QuizGeneration";
-import Quiz from "./pages/Quiz";
+import Quiz from "./pages/QuizPage";
 import Results from "./pages/Results";
 
 function App() {

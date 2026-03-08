@@ -4,6 +4,7 @@
 
 import { useMemo, useState } from "react";
 import "../styles/QuizGeneration.css";
+import { useNavigate } from "react-router-dom";
 
 //Set connect this topics so Gemini can Access them!!
 const TOPIC_SUGGESTIONS = [
@@ -38,16 +39,18 @@ export default function QuizGeneration() {
   const [numQuestions, setNumQuestions] = useState(5);
   const [style, setStyle] = useState("normal");
 
+  const navigate = useNavigate();
+
   const handleTopicDropdownChange = (value) => {
     setTopicDropdown(value);
     setTopic(value);
   };
 
-  const filteredSuggestions = useMemo(() => {
-    if (!topic) return TOPIC_SUGGESTIONS;
-    const t = topic.toLowerCase();
-    return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
-  }, [topic]);
+  // const filteredSuggestions = useMemo(() => {
+  //   if (!topic) return TOPIC_SUGGESTIONS;
+  //   const t = topic.toLowerCase();
+  //   return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
+  // }, [topic]);
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -59,8 +62,9 @@ export default function QuizGeneration() {
       style,
     };
 
+    // API request
     try {
-      const response = await fetch("http://localhost:3000/quiz-generator", {
+      const response = await fetch("http://localhost:5173/api/quiz-generator", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,13 +74,14 @@ export default function QuizGeneration() {
 
       const data = await response.json();
 
-      console.log(data);
+      navigate("/quiz", { state: { quiz } });
     } catch (error) {
-      console.error(error);
+      console.error("Failed to generate quiz", error);
+      alert("Error check console for details.");
     }
 
-    console.log(payload);
-    alert("will then hook this up to the backend ! :)");
+    // console.log(payload);
+    // alert("will then hook this up to the backend ! :)");
   };
 
   return (
