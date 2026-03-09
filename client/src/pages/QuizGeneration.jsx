@@ -64,18 +64,20 @@ export default function QuizGeneration() {
     };
 
     try {
-      const response = await fetch("http://localhost:5050/api/v1/quiz/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "http://localhost:5050/api/v1/quiz/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
 
       const data = await response.json();
 
       console.log("JSON returned from backend:", data); // <--- log the API JSON
-      alert("Check console for API JSON!");
 
       // Navigate to quiz page with actual data
       navigate("/quiz", { state: { quiz: data.quiz } });
