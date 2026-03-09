@@ -55,16 +55,16 @@ export default function QuizGeneration() {
   const handleGenerate = async (e) => {
     e.preventDefault();
 
+    // Payload
     const payload = {
       topic,
       difficulty,
-      numQuestions,
-      style,
+      questionCount: numQuestions,
+      type: style,
     };
 
-    // API request
     try {
-      const response = await fetch("http://localhost:5173/api/quiz-generator", {
+      const response = await fetch("http://localhost:5050/api/quiz/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,14 +74,15 @@ export default function QuizGeneration() {
 
       const data = await response.json();
 
-      navigate("/quiz", { state: { quiz } });
+      console.log("JSON returned from backend:", data); // <--- log the API JSON
+      alert("Check console for API JSON!");
+
+      // Navigate to quiz page with actual data
+      navigate("/quiz", { state: { quiz: data.quiz } });
     } catch (error) {
       console.error("Failed to generate quiz", error);
       alert("Error check console for details.");
     }
-
-    // console.log(payload);
-    // alert("will then hook this up to the backend ! :)");
   };
 
   return (

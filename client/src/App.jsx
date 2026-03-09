@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import QuizGeneration from "./pages/QuizGeneration";
-import Quiz from "./pages/QuizPage";
+import QuizPage from "./pages/QuizPage";
 import Results from "./pages/Results";
 
 function App() {
@@ -40,14 +40,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/quiz"
-          element={
-            <ProtectedRoute>
-              <Quiz />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/quiz" element={<QuizPage />} />
 
         <Route
           path="/results"

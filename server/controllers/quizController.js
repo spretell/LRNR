@@ -1,31 +1,39 @@
-// starter code for quizController.js
+// Handle requests
+// server/controllers/quizController.js
+const { buildQuizPrompt } = require("../utils/promptBuilder.js");
+const { generateQuiz } = require("../services/aiService.js");
 
-// this file contains the logic for handling quiz-related requests
-
-// import the OpenAI service function to generate quizzes
-const { generateOpenAIQuiz } = require("../services/geminiService");
-
-// controller function for creating a quiz
 async function createQuiz(req, res) {
-  // extract data sent from the frontend
-  const { topic, difficulty, numQuestions, style } = req.body;
-
   try {
-    // call the OpenAI service function to generate a quiz based on the provided parameters (mock for now)
-    const quiz = await generateOpenAIQuiz(
-      topic,
-      difficulty,
-      numQuestions,
-      style,
-    );
+    const { topic, difficulty, questionCount, type } = req.body;
+    console.log("REQUEST BODY:", req.body);
 
-    // send quiz back to frontend
-    res.json(quiz);
+    const prompt = buildQuizPrompt({ topic, difficulty, questionCount, type });
+    console.log("PROMPT SENT TO AI:", prompt);
+
+    const aiText = await generateQuiz(prompt);
+    console.log("RAW AI RESPONSE:", aiText);
+
+    let quiz;
+    try {
+      const cleaned = aiText
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+      quiz = JSON.parse(cleaned);
+    } catch (parseErr) {
+      console.error("JSON PARSE ERROR:", parseErr.message);
+      return res.status(500).json({
+        error: "Invalid JSON returned from AI",
+        raw: aiText,
+      });
+    }
+
+    res.json({ quiz });
   } catch (error) {
-    console.error("Error generating quiz:", error);
-    res.status(500).json({ error: "Failed to generate quiz." });
+    console.error("CREATE QUIZ ERROR:", error.message, error.stack);
+    res.status(500).json({ error: error.message });
   }
 }
 
-// export the controller functions so they can be used in the routes
 module.exports = { createQuiz };

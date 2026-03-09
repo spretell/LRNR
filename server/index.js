@@ -9,7 +9,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 // import route files
-const quizRoutes = require("./routes/quizRoutes");
+const quizRoutes = require("./routes/quizRoutes.js");
 const sessionRoutes = require("./routes/sessionRoutes");
 const userRoutes = require("./routes/userRoutes");
 const progressRoutes = require("./routes/progressRoutes");

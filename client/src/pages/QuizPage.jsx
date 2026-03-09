@@ -1,52 +1,80 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import QuestionCard from "../components/QuestionCard";
+import "./QuizPage.css";
 
 export default function QuizPage() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const quiz = location.state?.quiz;
+  const { quiz } = location.state || { quiz: [] }; // get quiz from navigation
+  const [answers, setAnswers] = useState({}); // store user answers
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // track current question
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
+  if (!quiz || quiz.length === 0) {
+    return <p>No quiz data found. Please generate a quiz first.</p>;
+  }
 
-  if (!quiz) return <p>No quiz loaded. Please generate a quiz first.</p>;
-
-  const question = quiz[currentQuestion];
-
-  const selectAnswer = (option) => {
-    setAnswers({ ...answers, [currentQuestion]: option });
+  const handleSelectAnswer = (choice) => {
+    setAnswers({ ...answers, [currentQuestionIndex]: choice });
   };
 
-  const nextQuestion = () => {
-    if (currentQuestion + 1 < quiz.length) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      // Navigate to result page
-      const score = quiz.reduce(
-        (acc, q, idx) => acc + (answers[idx] === q.correctAnswer ? 1 : 0),
-        0,
-      );
-      navigate("/result", { state: { score, total: quiz.length } });
+  const handleNext = () => {
+    if (currentQuestionIndex < quiz.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    let score = 0;
+    quiz.forEach((q, i) => {
+      if (answers[i] === q.answer) score += 1;
+    });
+    alert(`You scored ${score} / ${quiz.length}`);
+  };
+
+  const currentQuestion = quiz[currentQuestionIndex];
+
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h1>Quiz</h1>
-      <p>
-        Question {currentQuestion + 1} / {quiz.length}
-      </p>
+    <main className="quiz-page">
+      <h1>Your Quiz</h1>
 
-      <QuestionCard
-        question={question}
-        selectAnswer={selectAnswer}
-        selected={answers[currentQuestion]}
-      />
+      <div className="quiz-question-card">
+        <h3>
+          Q{currentQuestionIndex + 1}: {currentQuestion.question}
+        </h3>
+        <ul>
+          {currentQuestion.choices.map((choice, i) => (
+            <li key={i}>
+              <label>
+                <input
+                  type="radio"
+                  name={`question-${currentQuestionIndex}`}
+                  value={choice}
+                  checked={answers[currentQuestionIndex] === choice}
+                  onChange={() => handleSelectAnswer(choice)}
+                />
+                {choice}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <button onClick={nextQuestion} style={{ marginTop: 20 }}>
-        {currentQuestion + 1 < quiz.length ? "Next Question" : "Finish Quiz"}
-      </button>
-    </div>
+      <div className="quiz-actions">
+        <button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+          Previous
+        </button>
+
+        {currentQuestionIndex < quiz.length - 1 ? (
+          <button onClick={handleNext}>Next</button>
+        ) : (
+          <button onClick={handleSubmit}>Submit Quiz</button>
+        )}
+      </div>
+    </main>
   );
 }
