@@ -14,7 +14,7 @@ async function show(userId) {
     throw new Error("User not found");
   }
 
-  const user = rows[0];
+  const user = result[0];
 
   return {
     id: user.id,
@@ -29,7 +29,7 @@ async function show(userId) {
 
 async function create(username, password) {
   const [result] = await connection.promise().query(
-    `SELECT id, first_name, last_name, email, streak, level, experience_points
+    `SELECT id, first_name, last_name, email, password, streak, level, experience_points
     FROM users
     WHERE LOWER(username) = LOWER(?);`,
     [username]
