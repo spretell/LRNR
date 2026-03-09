@@ -186,17 +186,6 @@
   margin-top: 6px;
 }
 
-/*RESPONSIVE BREAKPOINT (<800px)*/
-
-@media (max-width: 800px) {
-  .nav-links--desktop {
-    display: none;
-  }
-
-  .hamburger {
-    display: inline-flex;
-  }
-}
 
 /*PRIMARY BUTTON ANIMATION*/
 
@@ -259,4 +248,21 @@
 
 .primary-btn:hover::after {
   opacity: 1;
+}
+.nav-loading {
+  font-size: 14px;
+  color: rgba(43, 39, 53, 0.7);
+  font-weight: 600;
+}
+
+/*RESPONSIVE BREAKPOINT (<800px)*/
+
+@media (max-width: 800px) {
+  .nav-links--desktop {
+    display: none;
+  }
+
+  .hamburger {
+    display: inline-flex;
+  }
 }
