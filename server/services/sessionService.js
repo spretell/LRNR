@@ -36,6 +36,11 @@ async function create(username, password) {
   );
 
   const user = result[0];
+
+  if (!user) {
+    throw new Error('Invalid credentials');
+  }
+  
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!user || !passwordMatch) {
