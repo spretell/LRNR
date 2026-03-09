@@ -49,7 +49,14 @@ function App() {
           }
         />
 
-      <Route path="/results" element={<Results />} />
+        <Route
+          path="/results"
+          element={
+            <ProtectedRoute>
+              <Results />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />
