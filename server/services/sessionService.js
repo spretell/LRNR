@@ -2,15 +2,45 @@ const connection = require('../db.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+async function show(userId) {
+  const [result] = await connection.promise().query(
+    `SELECT id, first_name, last_name, email, streak, level, experience_points
+    FROM users
+    WHERE id = ?`,
+    [userId]
+  );
+
+  if (rows.length === 0) {
+    throw new Error("User not found");
+  }
+
+  const user = result[0];
+
+  return {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    streak: user.streak,
+    level: user.level,
+    experience_points: user.experience_points,
+  }
+}
+
 async function create(username, password) {
   const [result] = await connection.promise().query(
-    `SELECT *
+    `SELECT id, first_name, last_name, email, password, streak, level, experience_points
     FROM users
     WHERE LOWER(username) = LOWER(?);`,
     [username]
   );
 
   const user = result[0];
+
+  if (!user) {
+    throw new Error('Invalid credentials');
+  }
+  
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!user || !passwordMatch) {
@@ -32,10 +62,12 @@ async function create(username, password) {
       email: user.email,
       streak: user.streak,
       level: user.level,
+      experience_points: user.experience_points,
     }
   }
 }
 
 module.exports = {
+  show,
   create
 };

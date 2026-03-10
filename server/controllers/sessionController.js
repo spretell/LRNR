@@ -1,5 +1,15 @@
 const sessionService = require('../services/sessionService.js');
 
+async function checkSession(req, res) {
+  try {
+    const user = await sessionService.show(req.user.userId);
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+}
+
 async function createSession(req, res) {
   const { username, password } = req.body;
 
@@ -17,7 +27,7 @@ async function createSession(req, res) {
         path: '/',
         maxAge: 3600000,
       })
-      .status(200)
+      .status(201)
       .json({
         message: 'Sign in successful',
         token,
@@ -30,6 +40,18 @@ async function createSession(req, res) {
   }
 };
 
+async function logout(req, res) {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+  res.status(200).json({ message: 'Sign out successful' });
+};
+
 module.exports = {
-  createSession
+  checkSession,
+  createSession,
+  logout,
 };

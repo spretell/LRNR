@@ -4,10 +4,15 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/navbar.css";
 
 /* i did ONE component for logged-out vs logged-in view*/
-export default function Navbar({ isLoggedIn }) {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+
+  // pull auth state from context (no more prop drilling)
+  const { logout, isAuthenticated, loading } = useAuth();
+
+  //  don't show the "logged out" navbar while auth is still loading
+  const showLoggedInNav = !loading && isAuthenticated;
 
   // Close the drawer
   const closeMenu = () => setMenuOpen(false);
@@ -66,7 +71,10 @@ export default function Navbar({ isLoggedIn }) {
 
         {/* DESKTOP NAV */}
         <div className="nav-links nav-links--desktop">
-          {isLoggedIn ? (
+          {/*show a small placeholder while auth is still loading*/}
+          {loading ? (
+            <span className="nav-loading">Loading...</span>
+          ) : showLoggedInNav ? (
             <>
               <NavLink to="/quiz" className={navLinkClass}>
                 Quiz
@@ -144,7 +152,10 @@ export default function Navbar({ isLoggedIn }) {
           </div>
 
           <div className="drawer-links">
-            {isLoggedIn ? (
+            {/* prevent showing logged-out drawer while auth is loading */}
+            {loading ? (
+              <span className="nav-loading">Loading...</span>
+            ) : showLoggedInNav ? (
               <>
                 <NavLink
                   to="/quiz"
