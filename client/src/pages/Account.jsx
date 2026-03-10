@@ -17,7 +17,6 @@ export default function Account() {
   console.log(user);
 
   const getNextLevelXp = (level) => {
- 
     return (level + 1) * 100;
   };
 
@@ -36,7 +35,8 @@ export default function Account() {
 
     // Keep XP progress within bounds so the bar doesn't overflow
     const clampedXp = Math.min(Math.max(xp, 0), nextLevelXp);
-    const xpPercent = nextLevelXp > 0 ? Math.round((clampedXp / nextLevelXp) * 100) : 0;
+    const xpPercent =
+      nextLevelXp > 0 ? Math.round((clampedXp / nextLevelXp) * 100) : 0;
 
     return {
       firstName: safeUser.first_name ?? "there",
@@ -49,7 +49,6 @@ export default function Account() {
       xpPercent,
     };
   }, [user]);
-
 
   if (loading) {
     return (
@@ -90,7 +89,8 @@ export default function Account() {
               <div className="stat-subsection">
                 <p className="stat-subtitle">How it works</p>
                 <p className="stat-detail">
-                  Platinum quizzes are earned when you score <strong>100%</strong> on a quiz.
+                  Platinum quizzes are earned when you score{" "}
+                  <strong>100%</strong> on a quiz.
                 </p>
               </div>
             </article>
@@ -99,24 +99,27 @@ export default function Account() {
             <article className="stat-card stat-card--gray">
               <p className="stat-label">Level (XP)</p>
 
-              <p className="stat-value">
-                Level {dashboard.level}
-              </p>
+              <p className="stat-value">Level {dashboard.level}</p>
 
               <p className="stat-help">
-                {Math.min(dashboard.xp, dashboard.nextLevelXp)}/{dashboard.nextLevelXp} XP to Level {dashboard.nextLevel}
+                {Math.min(dashboard.xp, dashboard.nextLevelXp)}/
+                {dashboard.nextLevelXp} XP to Level {dashboard.nextLevel}
               </p>
 
               {/* progress bar */}
               <div className="xp-bar" aria-label="XP progress">
-                <div className="xp-bar-fill" style={{ width: `${dashboard.xpPercent}%` }} />
+                <div
+                  className="xp-bar-fill"
+                  style={{ width: `${dashboard.xpPercent}%` }}
+                />
               </div>
 
               {/* how it works */}
               <div className="stat-subsection">
                 <p className="stat-subtitle">How it works</p>
                 <p className="stat-detail">
-                  Earn XP by completing quizzes. Higher scores (and harder quizzes) can award more XP.
+                  Earn XP by completing quizzes. Higher scores (and harder
+                  quizzes) can award more XP.
                 </p>
               </div>
             </article>
@@ -131,8 +134,9 @@ export default function Account() {
               <div className="stat-subsection">
                 <p className="stat-subtitle">How it works</p>
                 <p className="stat-detail">
-                  Your streak increases when you complete at least <strong>one quiz per day</strong>.
-                  Missing a day resets your streak.
+                  Your streak increases when you complete at least{" "}
+                  <strong>one quiz per day</strong>. Missing a day resets your
+                  streak.
                 </p>
               </div>
             </article>
@@ -144,7 +148,11 @@ export default function Account() {
               Ready for your next quiz? Generate one in seconds.
             </p>
 
-            <button className="primary-btn" type="button" onClick={goToQuizGenerator}>
+            <button
+              className="primary-btn"
+              type="button"
+              onClick={goToQuizGenerator}
+            >
               Go to Quiz Generator
             </button>
           </section>

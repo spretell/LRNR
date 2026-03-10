@@ -62,7 +62,11 @@ export default function Navbar() {
       <div className="nav-container">
         {/* LOGO */}
         <NavLink to="/" className="logo-link" onClick={closeMenu}>
-          <img className="logo-img" src="/images/LRNR-logo.png" alt="LRNR logo" />
+          <img
+            className="logo-img"
+            src="/images/LRNR-logo.png"
+            alt="LRNR logo"
+          />
         </NavLink>
 
         {/* DESKTOP NAV */}
@@ -80,7 +84,11 @@ export default function Navbar() {
                 Account
               </NavLink>
 
-              <button className="primary-btn" type="button" onClick={handleLogout}>
+              <button
+                className="primary-btn"
+                type="button"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </>
@@ -149,11 +157,19 @@ export default function Navbar() {
               <span className="nav-loading">Loading...</span>
             ) : showLoggedInNav ? (
               <>
-                <NavLink to="/quiz" className={navLinkClass} onClick={closeMenu}>
+                <NavLink
+                  to="/quiz"
+                  className={navLinkClass}
+                  onClick={closeMenu}
+                >
                   Quiz
                 </NavLink>
 
-                <NavLink to="/account" className={navLinkClass} onClick={closeMenu}>
+                <NavLink
+                  to="/account"
+                  className={navLinkClass}
+                  onClick={closeMenu}
+                >
                   Account
                 </NavLink>
 
@@ -166,7 +182,11 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <button className="primary-btn drawer-btn" type="button" onClick={handleLogin}>
+              <button
+                className="primary-btn drawer-btn"
+                type="button"
+                onClick={handleLogin}
+              >
                 Login
               </button>
             )}

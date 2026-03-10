@@ -22,11 +22,10 @@ export default function Auth() {
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // UI state
+  // ui state
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // if already logged in , send them to /account
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/account", { replace: true });
@@ -40,10 +39,13 @@ export default function Auth() {
       return "Password must be at least 6 characters.";
     }
 
-    if (mode === "signup") {
-      if (password && confirmPassword && password !== confirmPassword) {
-        return "Passwords do not match.";
-      }
+    if (
+      mode === "signup" &&
+      password &&
+      confirmPassword &&
+      password !== confirmPassword
+    ) {
+      return "Passwords do not match.";
     }
 
     return "";
@@ -51,19 +53,16 @@ export default function Auth() {
 
   const canSubmit = useMemo(() => {
     if (submitting) return false;
-
     if (!password || password.length < 6) return false;
 
     if (mode === "login") {
-      if (!username) return false;
-      return true;
+      return !!username.trim();
     }
 
-    // signup mode
-    if (!username) return false;
-    if (!firstName) return false;
-    if (!lastName) return false;
-    if (!email) return false;
+    if (!firstName.trim()) return false;
+    if (!lastName.trim()) return false;
+    if (!email.trim()) return false;
+    if (!username.trim()) return false;
     if (!confirmPassword) return false;
     if (password !== confirmPassword) return false;
 
@@ -222,22 +221,6 @@ export default function Auth() {
                   disabled={mode !== "signup"}
                 />
               </div>
-
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="confirmPassword">
-                  Confirm password
-                </label>
-                <input
-                  id="confirmPassword"
-                  className="auth-input"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                  disabled={mode !== "signup"}
-                />
-              </div>
             </div>
 
             <div className="auth-field">
@@ -269,6 +252,24 @@ export default function Auth() {
                   mode === "login" ? "current-password" : "new-password"
                 }
               />
+            </div>
+
+            <div className="auth-confirmWrap" aria-hidden={mode !== "signup"}>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="confirmPassword">
+                  Confirm password
+                </label>
+                <input
+                  id="confirmPassword"
+                  className="auth-input"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  disabled={mode !== "signup"}
+                />
+              </div>
             </div>
 
             {uiError && (
