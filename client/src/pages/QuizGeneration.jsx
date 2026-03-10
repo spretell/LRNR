@@ -4,22 +4,26 @@
 
 import { useMemo, useState } from "react";
 import "../styles/QuizGeneration.css";
+import { useNavigate } from "react-router-dom";
 
+//Set connect this topics so Gemini can Access them!!
 const TOPIC_SUGGESTIONS = [
-  "javascript",
-  "react",
-  "node",
-  "html",
-  "css",
-  "accessibility",
-  "git",
-  "api design",
+  "Javascript",
+  "React",
+  "Node",
+  "Html",
+  "CSS",
+  "Accessibility",
+  "Git",
+  "API design",
   "sql",
-  "aws",
+  "AWS",
 ];
 
-const DIFFICULTY_OPTIONS = ["novice", "intermediate", "expert"];
+// Set how all this values connect to the API
+const DIFFICULTY_OPTIONS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
+// Uses this values for the GEMINI API
 const STYLE_OPTIONS = [
   { value: "normal", label: "normal" },
   { value: "like-im-8", label: "like I’m 8" },
@@ -31,33 +35,56 @@ const STYLE_OPTIONS = [
 export default function QuizGeneration() {
   const [topic, setTopic] = useState("");
   const [topicDropdown, setTopicDropdown] = useState("");
-  const [difficulty, setDifficulty] = useState("novice");
+  const [difficulty, setDifficulty] = useState("Beginner");
   const [numQuestions, setNumQuestions] = useState(5);
   const [style, setStyle] = useState("normal");
+
+  const navigate = useNavigate();
 
   const handleTopicDropdownChange = (value) => {
     setTopicDropdown(value);
     setTopic(value);
   };
 
-  const filteredSuggestions = useMemo(() => {
-    if (!topic) return TOPIC_SUGGESTIONS;
-    const t = topic.toLowerCase();
-    return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
-  }, [topic]);
+  // const filteredSuggestions = useMemo(() => {
+  //   if (!topic) return TOPIC_SUGGESTIONS;
+  //   const t = topic.toLowerCase();
+  //   return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
+  // }, [topic]);
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
 
+    // Payload
     const payload = {
-      topic: topic.trim(),
+      topic,
       difficulty,
-      numQuestions,
-      style,
+      questionCount: numQuestions,
+      type: style,
     };
 
-    console.log(payload);
-    alert("will then hook this up to the backend ! :)");
+    try {
+      const response = await fetch(
+        "http://localhost:5050/api/v1/quiz/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const data = await response.json();
+
+      console.log("JSON returned from backend:", data); // <--- log the API JSON
+
+      // Navigate to quiz page with actual data
+      navigate("/quiz", { state: { quiz: data.quiz } });
+    } catch (error) {
+      console.error("Failed to generate quiz", error);
+      alert("Error check console for details.");
+    }
   };
 
   return (
@@ -116,6 +143,7 @@ export default function QuizGeneration() {
                     ))}
                   </select>
 
+                  {/* Figure how connect Input */}
                   <label className="qg-fieldLabel" htmlFor="topic-input">
                     Or type your own topic
                   </label>
@@ -132,6 +160,7 @@ export default function QuizGeneration() {
                 </div>
               </details>
 
+              {/* Figure how to connect to API */}
               <details className="qg-item">
                 <summary className="qg-summary">
                   <div>
@@ -143,6 +172,7 @@ export default function QuizGeneration() {
                   </span>
                 </summary>
 
+                {/* Figure how to connect to API */}
                 <div className="qg-body">
                   <label className="qg-fieldLabel" htmlFor="difficulty-select">
                     Select difficulty
@@ -174,6 +204,7 @@ export default function QuizGeneration() {
                   </span>
                 </summary>
 
+                {/* Figure how to connect to API */}
                 <div className="qg-body">
                   <label className="qg-fieldLabel" htmlFor="num-questions">
                     Choose how many questions
