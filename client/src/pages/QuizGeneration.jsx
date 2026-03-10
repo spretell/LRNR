@@ -2,11 +2,11 @@
 
 // collects user preferences (topic, difficulty, # of questions, style) and sends to backend to generate quiz
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import "../styles/QuizGeneration.css";
 import { useNavigate } from "react-router-dom";
 
-//Set connect this topics so Gemini can Access them!!
+// set connect this topics so gemini can access them!!
 const TOPIC_SUGGESTIONS = [
   "Javascript",
   "React",
@@ -20,10 +20,10 @@ const TOPIC_SUGGESTIONS = [
   "AWS",
 ];
 
-// Set how all this values connect to the API
+// set how all this values connect to the api
 const DIFFICULTY_OPTIONS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
-// Uses this values for the GEMINI API
+// uses this values for the gemini api
 const STYLE_OPTIONS = [
   { value: "normal", label: "normal" },
   { value: "like-im-8", label: "like I’m 8" },
@@ -38,6 +38,7 @@ export default function QuizGeneration() {
   const [difficulty, setDifficulty] = useState("Beginner");
   const [numQuestions, setNumQuestions] = useState(5);
   const [style, setStyle] = useState("normal");
+  const [customStyle, setCustomStyle] = useState("");
 
   const navigate = useNavigate();
 
@@ -46,21 +47,15 @@ export default function QuizGeneration() {
     setTopic(value);
   };
 
-  // const filteredSuggestions = useMemo(() => {
-  //   if (!topic) return TOPIC_SUGGESTIONS;
-  //   const t = topic.toLowerCase();
-  //   return TOPIC_SUGGESTIONS.filter((s) => s.includes(t));
-  // }, [topic]);
-
   const handleGenerate = async (e) => {
     e.preventDefault();
 
-    // Payload
+    // payload
     const payload = {
       topic,
       difficulty,
       questionCount: numQuestions,
-      type: style,
+      type: customStyle ? customStyle : style,
     };
 
     try {
@@ -77,13 +72,13 @@ export default function QuizGeneration() {
 
       const data = await response.json();
 
-      console.log("JSON returned from backend:", data); // <--- log the API JSON
+      console.log("json returned from backend:", data);
 
-      // Navigate to quiz page with actual data
+      // navigate to quiz page with actual data
       navigate("/quiz", { state: { quiz: data.quiz } });
     } catch (error) {
-      console.error("Failed to generate quiz", error);
-      alert("Error check console for details.");
+      console.error("failed to generate quiz", error);
+      alert("error check console for details.");
     }
   };
 
@@ -143,7 +138,6 @@ export default function QuizGeneration() {
                     ))}
                   </select>
 
-                  {/* Figure how connect Input */}
                   <label className="qg-fieldLabel" htmlFor="topic-input">
                     Or type your own topic
                   </label>
@@ -160,7 +154,6 @@ export default function QuizGeneration() {
                 </div>
               </details>
 
-              {/* Figure how to connect to API */}
               <details className="qg-item">
                 <summary className="qg-summary">
                   <div>
@@ -172,7 +165,6 @@ export default function QuizGeneration() {
                   </span>
                 </summary>
 
-                {/* Figure how to connect to API */}
                 <div className="qg-body">
                   <label className="qg-fieldLabel" htmlFor="difficulty-select">
                     Select difficulty
@@ -204,7 +196,6 @@ export default function QuizGeneration() {
                   </span>
                 </summary>
 
-                {/* Figure how to connect to API */}
                 <div className="qg-body">
                   <label className="qg-fieldLabel" htmlFor="num-questions">
                     Choose how many questions
@@ -228,7 +219,9 @@ export default function QuizGeneration() {
                   <div>
                     <p className="qg-label">Style</p>
                     <p className="qg-value">
-                      {STYLE_OPTIONS.find((s) => s.value === style)?.label}
+                      {customStyle
+                        ? customStyle
+                        : STYLE_OPTIONS.find((s) => s.value === style)?.label}
                     </p>
                   </div>
                   <span className="qg-chevron" aria-hidden="true">
@@ -238,14 +231,17 @@ export default function QuizGeneration() {
 
                 <div className="qg-body">
                   <label className="qg-fieldLabel" htmlFor="style">
-                    Question style
+                    Choose a style
                   </label>
 
                   <select
                     id="style"
                     className="qg-select"
                     value={style}
-                    onChange={(e) => setStyle(e.target.value)}
+                    onChange={(e) => {
+                      setStyle(e.target.value);
+                      setCustomStyle("");
+                    }}
                   >
                     {STYLE_OPTIONS.map((s) => (
                       <option key={s.value} value={s.value}>
@@ -253,6 +249,18 @@ export default function QuizGeneration() {
                       </option>
                     ))}
                   </select>
+
+                  <label className="qg-fieldLabel" htmlFor="custom-style">
+                    Or type your own style
+                  </label>
+
+                  <input
+                    id="custom-style"
+                    className="qg-input"
+                    value={customStyle}
+                    onChange={(e) => setCustomStyle(e.target.value)}
+                    placeholder="ex: pirate captain, sarcastic teacher, medieval knight..."
+                  />
                 </div>
               </details>
 
