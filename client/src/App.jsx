@@ -10,6 +10,7 @@ import Account from "./pages/Account";
 import QuizGeneration from "./pages/QuizGeneration";
 import QuizPage from "./pages/QuizPage";
 import Results from "./pages/Results";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -57,6 +58,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<NotFound />}
+         />
       </Routes>
 
       <Footer />
