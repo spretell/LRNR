@@ -27,7 +27,7 @@ export default function Footer() {
 
         {/* RIGHT SECTION */}
         <div className="footer-right">
-          <p className="footer-links-title">Links</p>
+          <p className="footer-links-title">Helpful Links:</p>
 
           <nav className="footer-links" aria-label="Footer navigation">
             <NavLink to="/" className="footer-link">
