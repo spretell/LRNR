@@ -7,6 +7,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 // import route files
 const quizRoutes = require("./routes/quizRoutes.js");
@@ -18,9 +19,16 @@ const progressRoutes = require("./routes/progressRoutes");
 const app = express();
 
 // middleware → allows cross-origin requests
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 // allows us to parse JSON data from requests
 app.use(express.json());
+// allows you to read the cookies. Example: req.cookies.token
+app.use(cookieParser());
 
 // basic route to test if server is running ; should see message on localhost:5050
 app.get("/", (req, res) => {

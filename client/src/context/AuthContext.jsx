@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch("/api/v1/session/me", {
+        const res = await fetch("/api/v1/session", {
           method: "GET",
           credentials: "include",
         });

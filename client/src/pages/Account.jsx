@@ -14,7 +14,7 @@ export default function Account() {
     navigate("/quiz-generation");
   };
 
-  console.log(user);
+  // console.log(user);
 
   const getNextLevelXp = (level) => {
     return (level + 1) * 100;
