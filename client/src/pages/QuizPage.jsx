@@ -40,39 +40,50 @@ export default function QuizPage() {
 
   return (
     <main className="quiz-page">
-      <h1>Your Quiz</h1>
-
       <div className="quiz-question-card">
-        <h3>
-          Q{currentQuestionIndex + 1}: {currentQuestion.question}
-        </h3>
-        <ul>
-          {currentQuestion.choices.map((choice, i) => (
-            <li key={i}>
-              <label>
-                <input
-                  type="radio"
-                  name={`question-${currentQuestionIndex}`}
-                  value={choice}
-                  checked={answers[currentQuestionIndex] === choice}
-                  onChange={() => handleSelectAnswer(choice)}
-                />
-                {choice}
-              </label>
-            </li>
-          ))}
-        </ul>
+        <h2>
+          {currentQuestionIndex + 1} of {quiz.length}
+        </h2>
+        <h1>Question</h1>
+        <h3>{currentQuestion.question}</h3>
+        {/* <ul> */}
+        {currentQuestion.choices.map((choice, i) => (
+          // <li key={i}>
+          <label
+            key={i}
+            className={`choice-btn ${answers[currentQuestionIndex] === choice ? "selected" : ""}`}
+          >
+            <input
+              type="radio"
+              name={`question-${currentQuestionIndex}`}
+              value={choice}
+              checked={answers[currentQuestionIndex] === choice}
+              onChange={() => handleSelectAnswer(choice)}
+            />
+            {choice}
+          </label>
+          // </li>
+        ))}
+        {/* </ul> */}
       </div>
 
       <div className="quiz-actions">
-        <button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+        <button
+          className="prev-btn"
+          onClick={handlePrevious}
+          disabled={currentQuestionIndex === 0}
+        >
           Previous
         </button>
 
         {currentQuestionIndex < quiz.length - 1 ? (
-          <button onClick={handleNext}>Next</button>
+          <button className="next-btn" onClick={handleNext}>
+            Next
+          </button>
         ) : (
-          <button onClick={handleSubmit}>Submit Quiz</button>
+          <button className="submit-btn" onClick={handleSubmit}>
+            Submit Quiz
+          </button>
         )}
       </div>
     </main>
