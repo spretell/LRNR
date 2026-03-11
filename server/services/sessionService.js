@@ -10,7 +10,7 @@ async function show(userId) {
     [userId]
   );
 
-  if (rows.length === 0) {
+  if (result.length === 0) {
     throw new Error("User not found");
   }
 
