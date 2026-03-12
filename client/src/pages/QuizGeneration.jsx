@@ -5,6 +5,7 @@
 import { useState } from "react";
 import "../styles/QuizGeneration.css";
 import { useNavigate } from "react-router-dom";
+import LoadingQuiz from "../components/LoadingQuiz";
 
 // set connect this topics so gemini can access them!!
 const TOPIC_SUGGESTIONS = [
@@ -39,6 +40,7 @@ export default function QuizGeneration() {
   const [numQuestions, setNumQuestions] = useState(5);
   const [style, setStyle] = useState("normal");
   const [customStyle, setCustomStyle] = useState("");
+  const [loading, setLoading] = useState(false); //Adding Loading
 
   const navigate = useNavigate();
 
@@ -49,6 +51,8 @@ export default function QuizGeneration() {
 
   const handleGenerate = async (e) => {
     e.preventDefault();
+
+    setLoading(true); //Loading ON
 
     // payload
     const payload = {
@@ -79,8 +83,14 @@ export default function QuizGeneration() {
     } catch (error) {
       console.error("failed to generate quiz", error);
       alert("error check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingQuiz />;
+  }
 
   return (
     <main className="qg-page">
