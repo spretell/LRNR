@@ -14,11 +14,9 @@
   border-radius: 28px;
   border: 1px solid #e5e1ef;
   overflow: hidden;
-
   transition:
-    background 800ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 800ms cubic-bezier(0.22, 1, 0.36, 1);
-
+    background 1200ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 1200ms cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow:
     0 20px 60px rgba(30, 27, 42, 0.1),
     0 2px 10px rgba(30, 27, 42, 0.06);
@@ -50,7 +48,7 @@
   inset: -35%;
   filter: blur(40px);
   pointer-events: none;
-  transition: background 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background 1200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .auth-card.card-login::before {
@@ -348,14 +346,14 @@
 @media (min-width: 901px) {
   .auth-card {
     transition:
-      background 1600ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 1600ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 1700ms cubic-bezier(0.22, 1, 0.36, 1);
+      background 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1800ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .auth-card.card-signup {
-    transform: translateY(-6px);
-    transition-delay: 280ms;
+    transform: translateY(0);
+    transition-delay: 0ms;
   }
 
   .auth-card.card-login {
@@ -365,9 +363,9 @@
 
   .auth-right {
     transition:
-      min-height 1600ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 350ms ease,
-      transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+      min-height 1800ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 900ms ease,
+      transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   }
 
@@ -376,62 +374,51 @@
   }
 
   .auth-card.card-signup .auth-right {
-    min-height: 460px;
+    min-height: 560px;
   }
-}
 
-@media (min-width: 901px) {
   .auth-card {
     will-change: transform;
   }
 }
 
-.auth-signupFields {
+.auth-signupFields,
+.auth-confirmWrap {
   display: grid;
   gap: 12px;
   max-height: 0;
   opacity: 0;
   transform: translateY(-6px);
+  filter: blur(1px);
   overflow: hidden;
   transition:
-    max-height 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 700ms ease,
-    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    max-height 1600ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 1200ms ease,
+    transform 1400ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1200ms ease;
 }
 
 .auth-right.is-signup .auth-signupFields {
-  max-height: 220px;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.auth-signupFields {
-  display: grid;
-  gap: 12px;
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-10px);
-  filter: blur(2px);
-  overflow: hidden;
-  transition:
-    max-height 1200ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 900ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.auth-right.is-signup .auth-signupFields {
-  max-height: 260px;
+  max-height: 280px;
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
 }
 
-.auth-right.is-login .auth-signupFields {
+.auth-right.is-signup .auth-confirmWrap {
+  max-height: 120px;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.auth-right.is-login .auth-signupFields,
+.auth-right.is-login .auth-confirmWrap {
   margin-bottom: 0;
 }
 
 .auth-right,
-.auth-signupFields {
+.auth-signupFields,
+.auth-confirmWrap {
   will-change: max-height, opacity, transform, filter;
 }

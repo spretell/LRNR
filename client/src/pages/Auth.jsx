@@ -1,48 +1,117 @@
 // Auth.jsx
-
 // login + create account page
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const { login, signup, isAuthenticated } = useAuth();
 
   const [mode, setMode] = useState("login");
 
-  const [email, setEmail] = useState("");
+  // login fields
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [name, setName] = useState("");
+  // signup fields
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // ui state
+  const [serverError, setServerError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/account", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   const uiError = useMemo(() => {
-    if (!email && !password) return "";
-    if (password && password.length < 6)
+    if (serverError) return serverError;
+
+    if (password && password.length < 6) {
       return "Password must be at least 6 characters.";
-    if (mode === "signup" && password !== confirmPassword)
+    }
+
+    if (
+      mode === "signup" &&
+      password &&
+      confirmPassword &&
+      password !== confirmPassword
+    ) {
       return "Passwords do not match.";
+    }
+
     return "";
-  }, [email, password, confirmPassword, mode]);
+  }, [serverError, password, confirmPassword, mode]);
 
   const canSubmit = useMemo(() => {
-    if (!email || !password) return false;
-    if (password.length < 6) return false;
-    if (mode === "signup") {
-      if (!name) return false;
-      if (!confirmPassword) return false;
-      if (password !== confirmPassword) return false;
+    if (submitting) return false;
+    if (!password || password.length < 6) return false;
+
+    if (mode === "login") {
+      return !!username.trim();
     }
+
+    if (!firstName.trim()) return false;
+    if (!lastName.trim()) return false;
+    if (!email.trim()) return false;
+    if (!username.trim()) return false;
+    if (!confirmPassword) return false;
+    if (password !== confirmPassword) return false;
+
     return true;
-  }, [email, password, confirmPassword, name, mode]);
+  }, [
+    submitting,
+    mode,
+    username,
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+  ]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError("");
 
-    console.log({ mode, name, email, password });
+    try {
+      setSubmitting(true);
 
-    navigate("/account");
+      if (mode === "login") {
+        await login(username.trim(), password);
+        navigate("/account");
+        return;
+      }
+
+      await signup({
+        username: username.trim(),
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim(),
+        password,
+      });
+
+      navigate("/account");
+    } catch (err) {
+      setServerError(err.message || "Something went wrong.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode);
+    setServerError("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -75,7 +144,7 @@ export default function Auth() {
               <button
                 type="button"
                 className={`auth-toggleBtn ${mode === "login" ? "is-active" : ""}`}
-                onClick={() => setMode("login")}
+                onClick={() => switchMode("login")}
                 aria-selected={mode === "login"}
               >
                 Log in
@@ -84,7 +153,7 @@ export default function Auth() {
               <button
                 type="button"
                 className={`auth-toggleBtn ${mode === "signup" ? "is-active" : ""}`}
-                onClick={() => setMode("signup")}
+                onClick={() => switchMode("signup")}
                 aria-selected={mode === "signup"}
               >
                 Create account
@@ -102,55 +171,69 @@ export default function Auth() {
               </h2>
               <p className="auth-formHint">
                 {mode === "login"
-                  ? "Enter your email and password to continue."
+                  ? "Enter your username and password to continue."
                   : "Enter your info to create an account."}
               </p>
             </div>
 
             <div className="auth-signupFields" aria-hidden={mode !== "signup"}>
               <div className="auth-field">
-                <label className="auth-label" htmlFor="name">
-                  Name
+                <label className="auth-label" htmlFor="firstName">
+                  First name
                 </label>
                 <input
-                  id="name"
+                  id="firstName"
                   className="auth-input"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="ex: John Doe"
-                  autoComplete="name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="ex: John"
+                  autoComplete="given-name"
                   disabled={mode !== "signup"}
                 />
               </div>
 
               <div className="auth-field">
-                <label className="auth-label" htmlFor="confirmPassword">
-                  Confirm password
+                <label className="auth-label" htmlFor="lastName">
+                  Last name
                 </label>
                 <input
-                  id="confirmPassword"
+                  id="lastName"
                   className="auth-input"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="ex: Doe"
+                  autoComplete="family-name"
+                  disabled={mode !== "signup"}
+                />
+              </div>
+
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  className="auth-input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  autoComplete="email"
                   disabled={mode !== "signup"}
                 />
               </div>
             </div>
 
             <div className="auth-field">
-              <label className="auth-label" htmlFor="email">
-                Email
+              <label className="auth-label" htmlFor="username">
+                Username
               </label>
               <input
-                id="email"
+                id="username"
                 className="auth-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="ex: johndoe"
+                autoComplete="username"
               />
             </div>
 
@@ -171,6 +254,24 @@ export default function Auth() {
               />
             </div>
 
+            <div className="auth-confirmWrap" aria-hidden={mode !== "signup"}>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="confirmPassword">
+                  Confirm password
+                </label>
+                <input
+                  id="confirmPassword"
+                  className="auth-input"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  disabled={mode !== "signup"}
+                />
+              </div>
+            </div>
+
             {uiError && (
               <p className="auth-error" role="alert">
                 {uiError}
@@ -178,7 +279,13 @@ export default function Auth() {
             )}
 
             <button className="auth-btn" type="submit" disabled={!canSubmit}>
-              {mode === "login" ? "Log in" : "Create account"}
+              {submitting
+                ? mode === "login"
+                  ? "Logging in..."
+                  : "Creating account..."
+                : mode === "login"
+                  ? "Log in"
+                  : "Create account"}
             </button>
 
             <div className="auth-links">
