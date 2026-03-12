@@ -98,6 +98,9 @@ export default function QuizPage() {
 
           // </li>
         ))}
+        <div className="info-text">
+          <p>Multiple-choice question: choose the one correct answer. ✅</p>
+        </div>
         {/* </ul> */}
       </div>
 
