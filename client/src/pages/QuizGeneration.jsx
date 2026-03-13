@@ -5,6 +5,7 @@
 import { useState } from "react";
 import "../styles/QuizGeneration.css";
 import { useNavigate } from "react-router-dom";
+import LoadingQuiz from "../components/LoadingQuiz";
 
 // set connect this topics so gemini can access them!!
 const TOPIC_SUGGESTIONS = [
@@ -39,6 +40,7 @@ export default function QuizGeneration() {
   const [numQuestions, setNumQuestions] = useState(5);
   const [style, setStyle] = useState("normal");
   const [customStyle, setCustomStyle] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,37 +52,56 @@ export default function QuizGeneration() {
   const handleGenerate = async (e) => {
     e.preventDefault();
 
-    // payload
+    setLoading(true);
+
     const payload = {
-      topic,
+      topic: topic.trim(),
       difficulty,
-      questionCount: numQuestions,
-      type: customStyle ? customStyle : style,
+      numQuestions,
+      style: customStyle.trim() ? customStyle.trim() : style,
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:5050/api/v1/quiz/generate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch("/api/v1/quiz/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
-      const data = await response.json();
+      const text = await response.text();
+      console.log("raw backend response:", text);
+
+      if (!response.ok) {
+        throw new Error(
+          `failed to generate quiz: ${response.status} - ${text}`,
+        );
+      }
+
+      const data = JSON.parse(text);
 
       console.log("json returned from backend:", data);
 
-      // navigate to quiz page with actual data
-      navigate("/quiz", { state: { quiz: data.quiz } });
+      const quizQuestions =
+        data?.quiz?.questions || data?.questions || data?.quiz || [];
+
+      navigate("/quiz", {
+        state: {
+          quiz: quizQuestions,
+        },
+      });
     } catch (error) {
       console.error("failed to generate quiz", error);
-      alert("error check console for details.");
+      alert("error generating quiz. check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingQuiz />;
+  }
 
   return (
     <main className="qg-page">
