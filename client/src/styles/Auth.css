@@ -382,43 +382,40 @@
   }
 }
 
-.auth-signupFields,
-.auth-confirmWrap {
-  display: grid;
-  gap: 12px;
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-6px);
-  filter: blur(1px);
-  overflow: hidden;
+.auth-passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-passwordWrapper .auth-input {
+  width: 100%;
+  padding-right: 46px;
+}
+
+.auth-eyeBtn {
+  position: absolute;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #7c768f;
+  cursor: pointer;
+  padding: 0;
+  line-height: 0;
   transition:
-    max-height 1600ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 1200ms ease,
-    transform 1400ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 1200ms ease;
+    color 200ms ease,
+    transform 200ms ease;
 }
 
-.auth-right.is-signup .auth-signupFields {
-  max-height: 280px;
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+.auth-eyeBtn:hover {
+  color: #2b2735;
+  transform: scale(1.05);
 }
 
-.auth-right.is-signup .auth-confirmWrap {
-  max-height: 120px;
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-.auth-right.is-login .auth-signupFields,
-.auth-right.is-login .auth-confirmWrap {
-  margin-bottom: 0;
-}
-
-.auth-right,
-.auth-signupFields,
-.auth-confirmWrap {
-  will-change: max-height, opacity, transform, filter;
+.auth-eyeBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
