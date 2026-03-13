@@ -41,7 +41,4 @@ app.use("/api/v1/session", sessionRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/progress", progressRoutes);
 
-// start the server ; uses PORT from .env or defaults to 5050
-// const PORT = process.env.PORT || 5050;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 module.exports = app;
