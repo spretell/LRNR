@@ -59,10 +59,10 @@ async function saveQuiz(req, res) {
 
 async function createQuiz(req, res) {
   try {
-    const { topic, difficulty, questionCount, type } = req.body;
+    const { topic, difficulty, numQuestions, type } = req.body;
     console.log("REQUEST BODY:", req.body);
 
-    const prompt = buildQuizPrompt({ topic, difficulty, questionCount, type });
+    const prompt = buildQuizPrompt({ topic, difficulty, numQuestions, type });
     console.log("PROMPT SENT TO AI:", prompt);
 
     const aiText = await generateQuiz(prompt);
