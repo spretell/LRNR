@@ -1,13 +1,14 @@
 const connection = require('../db.js');
 
 async function show(userId) {
+  console.log('here <><>', userId);
   const [result] = await connection.promise().query(
     `SELECT *
     FROM platinum_quizzes
     WHERE user_id = ?`,
     [userId]
   );
-
+  console.log('result', result)
   return result;
 };
 
