@@ -5,7 +5,6 @@ const { generateQuiz } = require("../services/aiService.js");
 async function showQuizzes(req, res) {
   const userId = req.user.userId;
   try {
-    console.log('user ID: ', userId);
     const result = await quizService.show(userId);
 
     if (!result || result.length === 0) {
