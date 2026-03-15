@@ -1,35 +1,40 @@
-import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/results.css";
+import LoadingResult from "../components/LoadingResult";
 
 export default function Results() {
-  // React Router navigation lets us move the user to another page
   const navigate = useNavigate();
+  const location = useLocation();
 
-  /*Placeholder quiz result data for now.
-     backend response?*/
-  const result = useMemo(
-    () => ({
-      correctAnswers: 8,
-      totalQuestions: 10,
-    }),
-    []
-  );
+  // Get the actual quiz results passed from QuizPage via state
+  const { correctAnswers, totalQuestions } = location.state || {
+    correctAnswers: 0,
+    totalQuestions: 0,
+  };
 
-  /*Calculate percentage score */
-  const scorePercent = Math.round(
-    (result.correctAnswers / result.totalQuestions) * 100
-  );
+  const [loading, setLoading] = useState(true);
 
-  /*
-    XP earned is based on percentage correct.
-    Simple version:
-    - 80% score = 80 XP
-    This is easy to explain and easy to scale later.
-  */
+  // loading for 4 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <LoadingResult />;
+  }
+
+  // Calculate percentage score
+  const scorePercent =
+    totalQuestions > 0
+      ? Math.round((correctAnswers / totalQuestions) * 100)
+      : 0;
+
+  // XP earned is equal to the percentage score
   const xpEarned = scorePercent;
 
-  // CTA button takes the useer back to quiz generation
+  // Navigate back to quiz generation
   const handleTryAnotherQuiz = () => {
     navigate("/quiz-generation");
   };
@@ -53,7 +58,7 @@ export default function Results() {
             <article className="result-card result-card--pink">
               <p className="result-label">Score</p>
               <p className="result-value">
-                {result.correctAnswers} / {result.totalQuestions}
+                {correctAnswers} / {totalQuestions}
               </p>
               <p className="result-help">Correct / Total Questions</p>
             </article>
@@ -62,7 +67,9 @@ export default function Results() {
             <article className="result-card result-card--blue">
               <p className="result-label">XP Earned</p>
               <p className="result-value">{xpEarned} XP</p>
-              <p className="result-help">XP awarded from your score percentage</p>
+              <p className="result-help">
+                XP awarded from your score percentage
+              </p>
             </article>
 
             {/* Card 3: Percentage */}
@@ -97,7 +104,6 @@ export default function Results() {
               Back to Dashboard
             </button>
           </div>
-
         </div>
       </section>
     </main>
