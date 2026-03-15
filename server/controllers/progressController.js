@@ -1,7 +1,7 @@
 const progressService = require('../services/progressService.js');
 
 async function updateXP(req, res) {
-  const userId = req.params.id;
+  const userId = req.user.userId;
   const { value } = req.body;
 
   try {
@@ -26,7 +26,7 @@ async function updateXP(req, res) {
 }
 
 async function updateStreak(req, res) {
-  const userId = req.params.id;
+  const userId = req.user.userId;
 
   try {
     const result = await progressService.updateStreak(userId);

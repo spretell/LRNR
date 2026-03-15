@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require("../middleware/auth.js");
 const { 
   updateXP, 
   updateStreak 
@@ -6,7 +7,7 @@ const {
 
 const router = express.Router();
 
-router.post('/:id/xp', updateXP);
-router.post('/:id/streak', updateStreak);
+router.post('/xp', auth, updateXP);
+router.post('/streak', auth, updateStreak);
 
 module.exports = router;
