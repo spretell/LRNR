@@ -1,13 +1,14 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./QuizPage.css";
 
 export default function QuizPage() {
   const location = useLocation();
-  const { quiz } = location.state || { quiz: [] }; // get quiz from navigation
-  const [answers, setAnswers] = useState({}); // store user answers
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // track current question
-  const [timeLeft, setTimeLeft] = useState(300); // total time in seconds (e.g., 5 minutes)
+  const navigate = useNavigate();
+  const { quiz } = location.state || { quiz: [] };
+  const [answers, setAnswers] = useState({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(300);
 
   // Countdown
   useEffect(() => {
@@ -49,7 +50,10 @@ export default function QuizPage() {
     quiz.forEach((q, i) => {
       if (answers[i] === q.answer) score += 1;
     });
-    alert(`You scored ${score} / ${quiz.length}`);
+    // alert(`You scored ${score} / ${quiz.length}`);
+    navigate("/results", {
+      state: { correctAnswers: score, totalQuestions: quiz.length },
+    });
   };
 
   const currentQuestion = quiz[currentQuestionIndex];
