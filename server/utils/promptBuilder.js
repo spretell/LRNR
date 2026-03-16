@@ -1,7 +1,7 @@
 // Functions Helper
 function buildQuizPrompt(config) {
   return `
-Generate ${config.questionCount} multiple choice quiz questions.
+Generate exactly ${config.numQuestions} multiple choice quiz questions. No more, no less.
 
 Topic: ${config.topic}
 Difficulty: ${config.difficulty}
