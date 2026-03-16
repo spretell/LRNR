@@ -7,7 +7,6 @@ async function show(userId) {
     WHERE user_id = ?`,
     [userId]
   );
-
   return result;
 };
 
