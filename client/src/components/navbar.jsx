@@ -80,7 +80,7 @@ export default function Navbar() {
             <span className="nav-loading">Loading...</span>
           ) : showLoggedInNav ? (
             <>
-              <NavLink to="/quiz" className={navLinkClass}>
+              <NavLink to="/quiz-generation" className={navLinkClass}>
                 Quiz
               </NavLink>
 
@@ -162,7 +162,7 @@ export default function Navbar() {
             ) : showLoggedInNav ? (
               <>
                 <NavLink
-                  to="/quiz"
+                  to="/quiz-generation"
                   className={navLinkClass}
                   onClick={closeMenu}
                 >
