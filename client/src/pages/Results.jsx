@@ -2,48 +2,101 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/results.css";
 import LoadingResult from "../components/LoadingResult";
+import { useAuth } from "../context/AuthContext"; // <--- import AuthContext
 
 export default function Results() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { refreshUser } = useAuth(); // <--- get refreshUser from context
 
-  // Get the actual quiz results passed from QuizPage via state
-  const { correctAnswers, totalQuestions } = location.state || {
+  const { correctAnswers, totalQuestions, currentQuizId } = location.state || {
     correctAnswers: 0,
     totalQuestions: 0,
+    currentQuizId: null,
   };
 
   const [loading, setLoading] = useState(true);
 
-  // loading for 4 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 4000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) {
-    return <LoadingResult />;
-  }
-
-  // Calculate percentage score
   const scorePercent =
     totalQuestions > 0
       ? Math.round((correctAnswers / totalQuestions) * 100)
       : 0;
-
-  // XP earned is equal to the percentage score
   const xpEarned = scorePercent;
 
-  // Navigate back to quiz generation
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      setLoading(false);
+
+      try {
+        // 1. Update XP
+        await fetch("/api/v1/progress/xp", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ value: xpEarned }),
+        });
+
+        // 2️. Update Streak
+        await fetch("/api/v1/progress/streak", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        // 3️. Update Platinum Quiz if 100%
+        if (scorePercent === 100 && currentQuizId) {
+          const res = await fetch("/api/v1/quiz", {
+            method: "GET",
+            credentials: "include",
+          });
+          const quizzes = await res.json();
+
+          const platinumQuiz = quizzes.find(
+            (q) => q.quizId === currentQuizId && q.type === "platinum",
+          );
+
+          if (platinumQuiz) {
+            await fetch(`/api/v1/quiz/${platinumQuiz.id}`, {
+              method: "PUT",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ score: 100 }),
+            });
+          } else {
+            await fetch("/api/v1/quiz", {
+              method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                quizId: currentQuizId,
+                type: "platinum",
+                score: 100,
+              }),
+            });
+          }
+        }
+
+        // 4️. Refresh user context so Account page shows updated XP/Streak/Platinum
+        if (refreshUser) {
+          await refreshUser();
+        }
+      } catch (err) {
+        console.error("Error updating progress:", err);
+      }
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [xpEarned, scorePercent, currentQuizId, refreshUser]);
+
   const handleTryAnotherQuiz = () => {
     navigate("/quiz-generation");
   };
+
+  if (loading) return <LoadingResult />;
 
   return (
     <main className="results-page">
       <section className="results-shell">
         <div className="results-hero">
-          {/* Page heading / intro */}
           <header className="results-header">
             <p className="results-eyebrow">Quiz Complete</p>
             <h1 className="results-title">Here are your results</h1>
@@ -52,9 +105,7 @@ export default function Results() {
             </p>
           </header>
 
-          {/* Results summary cards */}
           <section className="results-grid" aria-label="Quiz results summary">
-            {/* Card 1: Score */}
             <article className="result-card result-card--pink">
               <p className="result-label">Score</p>
               <p className="result-value">
@@ -63,7 +114,6 @@ export default function Results() {
               <p className="result-help">Correct / Total Questions</p>
             </article>
 
-            {/* Card 2: XP Earned */}
             <article className="result-card result-card--blue">
               <p className="result-label">XP Earned</p>
               <p className="result-value">{xpEarned} XP</p>
@@ -72,7 +122,6 @@ export default function Results() {
               </p>
             </article>
 
-            {/* Card 3: Percentage */}
             <article className="result-card result-card--purple">
               <p className="result-label">Percentage</p>
               <p className="result-value">{scorePercent}%</p>
@@ -94,7 +143,6 @@ export default function Results() {
             </button>
           </section>
 
-          {/* Secondary navigation option for users who want to review progress */}
           <div className="results-dashboard-link">
             <button
               className="results-secondary-btn"
