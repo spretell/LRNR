@@ -61,7 +61,11 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="nav-container">
         {/* LOGO */}
-        <NavLink to="/" className="logo-link" onClick={closeMenu}>
+        <NavLink
+          to={isAuthenticated ? "/account" : "/"}
+          className="logo-link"
+          onClick={closeMenu}
+        >
           <img
             className="logo-img"
             src="/images/LRNR-logo.png"
