@@ -4,8 +4,12 @@ const { saveQuiz, showQuizzes, createQuiz } = require("../controllers/quizContro
 
 const router = express.Router();
 
-router.get('/', auth, showQuizzes);
-router.post('/', auth, saveQuiz);
 router.post("/generate", createQuiz);
+router.post('/', auth, saveQuiz);
+router.get('/', auth, showQuizzes);
+// Check
+router.post("/:id", saveQuiz);
+router.get("/:id", showQuizzes);
+
 
 module.exports = router;

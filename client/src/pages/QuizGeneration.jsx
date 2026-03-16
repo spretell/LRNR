@@ -58,8 +58,10 @@ export default function QuizGeneration() {
       topic: topic.trim(),
       difficulty,
       numQuestions,
-      style: customStyle.trim() ? customStyle.trim() : style,
+      type: customStyle.trim() ? customStyle.trim() : style,
     };
+
+    console.log("payload being sent:", payload);
 
     try {
       const response = await fetch("/api/v1/quiz/generate", {
