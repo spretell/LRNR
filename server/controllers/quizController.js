@@ -3,8 +3,7 @@ const { buildQuizPrompt } = require("../utils/promptBuilder.js");
 const { generateQuiz } = require("../services/aiService.js");
 
 async function showQuizzes(req, res) {
-  const userId = req.params.id;
-
+  const userId = req.user.userId;
   try {
     const result = await quizService.show(userId);
 
@@ -26,7 +25,7 @@ async function showQuizzes(req, res) {
 }
 
 async function saveQuiz(req, res) {
-  const userId = req.params.id;
+  const userId = req.user.userId;
   const { title, difficulty } = req.body;
 
   if (!title || !difficulty) {
