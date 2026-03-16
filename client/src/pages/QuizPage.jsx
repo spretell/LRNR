@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./QuizPage.css";
+import "../styles/QuizPage.css";
 
 export default function QuizPage() {
   const location = useLocation();
