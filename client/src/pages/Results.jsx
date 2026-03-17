@@ -28,23 +28,26 @@ export default function Results() {
       setLoading(false);
 
       try {
-        // 1. Update XP
-        await fetch("/api/v1/progress/xp", {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (!apiUrl) throw new Error("VITE_API_URL is not defined in .env");
+
+        // Update XP
+        await fetch(`${apiUrl}/api/v1/progress/xp`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ value: xpEarned }),
         });
 
-        // 2️. Update Streak
-        await fetch("/api/v1/progress/streak", {
+        // Update Streak
+        await fetch(`${apiUrl}/api/v1/progress/streak`, {
           method: "POST",
           credentials: "include",
         });
 
-        // 3️. Update Platinum Quiz if 100%
+        // Update Platinum Quiz if 100%
         if (scorePercent === 100 && currentQuizId) {
-          const res = await fetch("/api/v1/quiz", {
+          const res = await fetch(`${apiUrl}/api/v1/quiz`, {
             method: "GET",
             credentials: "include",
           });
@@ -55,14 +58,14 @@ export default function Results() {
           );
 
           if (platinumQuiz) {
-            await fetch(`/api/v1/quiz/${platinumQuiz.id}`, {
+            await fetch(`${apiUrl}/api/v1/quiz/${platinumQuiz.id}`, {
               method: "PUT",
               credentials: "include",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ score: 100 }),
             });
           } else {
-            await fetch("/api/v1/quiz", {
+            await fetch(`${apiUrl}/api/v1/quiz`, {
               method: "POST",
               credentials: "include",
               headers: { "Content-Type": "application/json" },
@@ -75,7 +78,7 @@ export default function Results() {
           }
         }
 
-        // 4️. Refresh user context so Account page shows updated XP/Streak/Platinum
+        // Refresh user context
         if (refreshUser) {
           await refreshUser();
         }

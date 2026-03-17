@@ -64,7 +64,12 @@ export default function QuizGeneration() {
     console.log("payload being sent:", payload);
 
     try {
-      const response = await fetch("/api/v1/quiz/generate", {
+      const apiUrl = import.meta.env.VITE_API_URL; // <-- Vite env variable
+      if (!apiUrl) {
+        throw new Error("VITE_API_URL is not defined in your .env file");
+      }
+
+      const response = await fetch(`${apiUrl}/api/v1/quiz/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
