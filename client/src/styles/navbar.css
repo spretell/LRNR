@@ -5,10 +5,11 @@
 }
 
 .nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  /* max-width: 1200px; */
+  margin: 0;
   padding: 20px;
-
+  padding-left: 0;
+  height: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,7 +26,7 @@
 
 /* LOGO IMAGE (desktop) */
 .logo-img {
-  height: 120px;
+  height: 100px;
   width: auto;
   display: block;
 }
@@ -38,11 +39,10 @@
   gap: 24px;
 }
 
-
 .nav-link {
   text-decoration: none;
   font-weight: 500;
-  color: #2B2735;
+  color: #2b2735;
   transition: color 0.3s ease;
 }
 
@@ -78,7 +78,7 @@
 .hamburger-lines span {
   width: 26px;
   height: 2px;
-  background: #2B2735;
+  background: #2b2735;
   border-radius: 2px;
 }
 
@@ -109,7 +109,7 @@
   width: min(80vw, 320px);
 
   /* light drawer color */
-  background: #E5E1EF;
+  background: #e5e1ef;
   color: #353427;
 
   transform: translateX(100%);
@@ -172,20 +172,18 @@
 }
 
 .drawer .nav-link:hover {
-  color: #2B2735;
+  color: #2b2735;
 }
-
 
 .drawer .nav-link.active {
   font-weight: 700;
-  color: #2B2735;
+  color: #2b2735;
 }
 
 .drawer-btn {
   align-self: flex-start;
   margin-top: 6px;
 }
-
 
 /*PRIMARY BUTTON ANIMATION*/
 
@@ -196,7 +194,7 @@
   border: none;
   cursor: pointer;
   overflow: hidden;
-  background-color: #C7C2E3;
+  background-color: #c7c2e3;
   color: #353427;
   font-size: 16px;
   font-weight: 600;
@@ -219,7 +217,7 @@
   position: absolute;
   inset: 0;
   /* Hover background color */
-  background-color: #2B2735;
+  background-color: #2b2735;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);

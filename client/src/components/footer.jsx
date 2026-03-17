@@ -26,27 +26,25 @@ export default function Footer() {
         </div>
 
         {/* RIGHT SECTION */}
-        <div className="footer-right">
-          <p className="footer-links-title">Links</p>
+        {isAuthenticated && (
+          <div className="footer-right">
+            <p className="footer-links-title">Helpful Links:</p>
 
-          <nav className="footer-links" aria-label="Footer navigation">
-            <NavLink to="/" className="footer-link">
-              Home
-            </NavLink>
+            <nav className="footer-links" aria-label="Footer navigation">
+              <NavLink to="/account" className="footer-link">
+                Home
+              </NavLink>
 
-            {isAuthenticated && (
-              <>
-                <NavLink to="/account" className="footer-link">
-                  Account
-                </NavLink>
+              <NavLink to="/account" className="footer-link">
+                Account
+              </NavLink>
 
-                <NavLink to="/quiz" className="footer-link">
-                  Quiz
-                </NavLink>
-              </>
-            )}
-          </nav>
-        </div>
+              <NavLink to="/quiz-generation" className="footer-link">
+                Quiz
+              </NavLink>
+            </nav>
+          </div>
+        )}
       </div>
     </footer>
   );

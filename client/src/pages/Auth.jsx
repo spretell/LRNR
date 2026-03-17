@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
@@ -22,11 +23,14 @@ export default function Auth() {
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // UI state
+  // password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // ui state
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // if already logged in , send them to /account
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/account", { replace: true });
@@ -40,10 +44,13 @@ export default function Auth() {
       return "Password must be at least 6 characters.";
     }
 
-    if (mode === "signup") {
-      if (password && confirmPassword && password !== confirmPassword) {
-        return "Passwords do not match.";
-      }
+    if (
+      mode === "signup" &&
+      password &&
+      confirmPassword &&
+      password !== confirmPassword
+    ) {
+      return "Passwords do not match.";
     }
 
     return "";
@@ -51,19 +58,16 @@ export default function Auth() {
 
   const canSubmit = useMemo(() => {
     if (submitting) return false;
-
     if (!password || password.length < 6) return false;
 
     if (mode === "login") {
-      if (!username) return false;
-      return true;
+      return !!username.trim();
     }
 
-    // signup mode
-    if (!username) return false;
-    if (!firstName) return false;
-    if (!lastName) return false;
-    if (!email) return false;
+    if (!firstName.trim()) return false;
+    if (!lastName.trim()) return false;
+    if (!email.trim()) return false;
+    if (!username.trim()) return false;
     if (!confirmPassword) return false;
     if (password !== confirmPassword) return false;
 
@@ -113,6 +117,8 @@ export default function Auth() {
     setServerError("");
     setPassword("");
     setConfirmPassword("");
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   return (
@@ -222,22 +228,6 @@ export default function Auth() {
                   disabled={mode !== "signup"}
                 />
               </div>
-
-              <div className="auth-field">
-                <label className="auth-label" htmlFor="confirmPassword">
-                  Confirm password
-                </label>
-                <input
-                  id="confirmPassword"
-                  className="auth-input"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                  disabled={mode !== "signup"}
-                />
-              </div>
             </div>
 
             <div className="auth-field">
@@ -258,17 +248,70 @@ export default function Auth() {
               <label className="auth-label" htmlFor="password">
                 Password
               </label>
-              <input
-                id="password"
-                className="auth-input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                autoComplete={
-                  mode === "login" ? "current-password" : "new-password"
-                }
-              />
+
+              <div className="auth-passwordWrapper">
+                <input
+                  id="password"
+                  className="auth-input"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete={
+                    mode === "login" ? "current-password" : "new-password"
+                  }
+                />
+
+                <button
+                  type="button"
+                  className="auth-eyeBtn"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="auth-confirmWrap" aria-hidden={mode !== "signup"}>
+              <div className="auth-field">
+                <label className="auth-label" htmlFor="confirmPassword">
+                  Confirm password
+                </label>
+
+                <div className="auth-passwordWrapper">
+                  <input
+                    id="confirmPassword"
+                    className="auth-input"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    disabled={mode !== "signup"}
+                  />
+
+                  <button
+                    type="button"
+                    className="auth-eyeBtn"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    aria-label={
+                      showConfirmPassword
+                        ? "Hide confirm password"
+                        : "Show confirm password"
+                    }
+                    aria-pressed={showConfirmPassword}
+                    disabled={mode !== "signup"}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
 
             {uiError && (

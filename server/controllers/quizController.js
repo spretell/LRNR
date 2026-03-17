@@ -1,9 +1,9 @@
-// const { generateOpenAIQuiz } = require("../services/openaiService");
 const quizService = require('../services/quizService');
+const { buildQuizPrompt } = require("../utils/promptBuilder.js");
+const { generateQuiz } = require("../services/aiService.js");
 
 async function showQuizzes(req, res) {
-  const userId = req.params.id;
-
+  const userId = req.user.userId;
   try {
     const result = await quizService.show(userId);
 
@@ -25,7 +25,7 @@ async function showQuizzes(req, res) {
 }
 
 async function saveQuiz(req, res) {
-  const userId = req.params.id;
+  const userId = req.user.userId;
   const { title, difficulty } = req.body;
 
   if (!title || !difficulty) {
@@ -56,8 +56,41 @@ async function saveQuiz(req, res) {
   }
 }
 
-// export the controller functions so they can be used in the routes
+async function createQuiz(req, res) {
+  try {
+    const { topic, difficulty, numQuestions, type } = req.body;
+    console.log("REQUEST BODY:", req.body);
+
+    const prompt = buildQuizPrompt({ topic, difficulty, numQuestions, type });
+    console.log("PROMPT SENT TO AI:", prompt);
+
+    const aiText = await generateQuiz(prompt);
+    console.log("RAW AI RESPONSE:", aiText);
+
+    let quiz;
+    try {
+      const cleaned = aiText
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+      quiz = JSON.parse(cleaned);
+    } catch (parseErr) {
+      console.error("JSON PARSE ERROR:", parseErr.message);
+      return res.status(500).json({
+        error: "Invalid JSON returned from AI",
+        raw: aiText,
+      });
+    }
+
+    res.json({ quiz });
+  } catch (error) {
+    console.error("CREATE QUIZ ERROR:", error.message, error.stack);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   showQuizzes,
   saveQuiz,
+  createQuiz,
 };

@@ -6,10 +6,9 @@
 
 /* Controls overall layout width + spacing */
 .footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 26px 20px;
-
+  /* max-width: 1200px; */
+  margin: 0;
+  padding: 26px 0px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -20,13 +19,13 @@
 
 .footer-left {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 
 /* Logo sizing */
 .footer-logo {
-  height: 110px;
+  height: 80px;
   width: 180px;
   object-fit: contain;
   display: block;
@@ -36,7 +35,7 @@
 .footer-copy {
   margin: 0;
   font-size: 14px;
-  color: #2B2735;
+  color: #2b2735;
 }
 
 /* Tagline (muted tone) */
@@ -50,38 +49,38 @@
 
 /* Wrapper for title + links */
 .footer-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; /* pushes everything to the right */
-  text-align: right;
+  display: block;
+  align-items: center;
   gap: 10px;
+  margin-right: 40px;
 }
 
 /* "Links" section title */
 .footer-links-title {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.4px;
   color: rgba(43, 39, 53, 0.7);
-  align-self: flex-end; 
+  align-self: center;
 }
 
 /* Links container */
 .footer-links {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 14px;
 }
 
 /* Individual link styling */
 .footer-link {
   text-decoration: none;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  color: #2B2735;
-  transition: color 0.2s ease, transform 0.2s ease;
+  color: #2b2735;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 /* Hover animation */
@@ -94,6 +93,27 @@
   .footer-container {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 40px;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
   }
 
   .footer-right {

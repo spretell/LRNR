@@ -1,18 +1,18 @@
-// starter code for quizRoutes.js
+const express = require("express");
 
-// this file defines routes related to quizzes
+const auth = require("../middleware/auth.js");
+const {
+  saveQuiz,
+  showQuizzes,
+  createQuiz,
+} = require("../controllers/quizController.js");
 
-// import express and create a router
-const express = require('express');
 const router = express.Router();
 
-// import controller functions
-const { saveQuiz, showQuizzes } = require('../controllers/quizController');
+router.post("/generate", createQuiz);
+router.get("/", auth, showQuizzes);
+router.post("/", auth, saveQuiz);
+router.post("/:id", saveQuiz);
+router.get("/:id", showQuizzes);
 
-// POST /api/quiz → create a new quiz
-// router.post('/', createQuiz);
-router.get('/:id', showQuizzes);
-router.post('/:id', saveQuiz);
-
-// export the router so it can be used in index.js
 module.exports = router;

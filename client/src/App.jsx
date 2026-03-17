@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import QuizGeneration from "./pages/QuizGeneration";
-import Quiz from "./pages/Quiz";
+import QuizPage from "./pages/QuizPage";
 import Results from "./pages/Results";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
           path="/quiz"
           element={
             <ProtectedRoute>
-              <Quiz />
+              <QuizPage />
             </ProtectedRoute>
           }
         />
@@ -57,6 +58,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />

@@ -1,0 +1,128 @@
+.notfound-page {
+  min-height: 100vh;
+  padding: 40px 16px 60px;
+  background-color: #f6f4fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* outer shell keeps the content centered and prevents it from getting too wide */
+.notfound-shell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* main hero container */
+.notfound-hero {
+  position: relative;
+  width: min(900px, 100%);
+  border-radius: 28px;
+  padding: 56px 34px;
+  border: 1px solid #e5e1ef;
+  overflow: hidden;
+  text-align: center;
+
+  background: linear-gradient(
+    135deg,
+    #eef5ff 0%,
+    #ede7ff 35%,
+    #f8dff1 70%,
+    #f3eff8 100%
+  );
+
+  box-shadow:
+    0 20px 60px rgba(30, 27, 42, 0.1),
+    0 2px 10px rgba(30, 27, 42, 0.06);
+}
+
+/* glow effect behind the content */
+.notfound-hero::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(189, 167, 235, 0.55) 0%,
+    rgba(199, 194, 227, 0.25) 35%,
+    rgba(246, 244, 250, 0) 70%
+  );
+  filter: blur(20px);
+  z-index: 0;
+}
+
+/* keeps all visible content above the glow */
+.notfound-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.notfound-text {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(43, 39, 53, 0.7);
+}
+
+.notfound-title {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #2b2735;
+}
+
+.notfound-subtitle {
+  margin: 14px auto 0;
+  max-width: 560px;
+  font-size: 16px;
+  color: rgba(43, 39, 53, 0.75);
+}
+
+/* large 404 number */
+.notfound-code {
+  margin-top: 28px;
+  font-size: clamp(90px, 16vw, 180px);
+  line-height: 1;
+  font-weight: 800;
+  color: rgba(106, 100, 200, 0.22);
+}
+
+.notfound-actions {
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+
+.notfound-secondary-btn {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: #6a64c8;
+  cursor: pointer;
+}
+
+.notfound-secondary-btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 800px) {
+  .notfound-hero {
+    padding: 40px 20px;
+  }
+
+  .notfound-title {
+    font-size: 36px;
+  }
+
+  .notfound-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
