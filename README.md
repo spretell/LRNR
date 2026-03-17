@@ -1,6 +1,6 @@
 # LRNR AI Quiz Platform
 
-![LRNR Logo](./images/LRNR-logo.png)
+![LRNR Logo](./client/public/images/LRNR-logo.png)
 
 LRNR is an AI-powered quiz generation platform designed to help users test their knowledge, track their learning progress, and build consistent study habits.
 
@@ -26,7 +26,7 @@ The platform combines an interactive user interface with a SQL-based backend to 
 
 # Dashboard Example
 
-![Dashboard Screenshot](./images/LRNR-dashboard.png)
+![Dashboard Screenshot](./client/public/images/LRNR-dashboard.png)
 
 The dashboard provides users with a clear overview of their learning progress including:
 
