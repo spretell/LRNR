@@ -7,12 +7,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const isAuthenticated = !!user;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // restore session on app load
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch("/api/v1/session", {
+        const res = await fetch(`${apiUrl}/api/v1/session`, {
           method: "GET",
           credentials: "include",
         });
@@ -37,7 +38,7 @@ export function AuthProvider({ children }) {
   // NEW: refreshUser to reload the latest user info
   const refreshUser = async () => {
     try {
-      const res = await fetch("/api/v1/session", {
+      const res = await fetch(`${apiUrl}/api/v1/session`, {
         method: "GET",
         credentials: "include",
       });
@@ -53,7 +54,7 @@ export function AuthProvider({ children }) {
 
   // login function
   async function login(username, password) {
-    const res = await fetch("/api/v1/session", {
+    const res = await fetch(`${apiUrl}/api/v1/session`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -72,7 +73,7 @@ export function AuthProvider({ children }) {
 
   // signup function
   async function signup(userData) {
-    const res = await fetch("/api/v1/user", {
+    const res = await fetch(`${apiUrl}/api/v1/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -89,7 +90,7 @@ export function AuthProvider({ children }) {
 
   // logout function
   async function logout() {
-    await fetch("/api/v1/session/logout", {
+    await fetch(`${apiUrl}/api/v1/session/logout`, {
       method: "POST",
       credentials: "include",
     });
